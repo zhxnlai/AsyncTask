@@ -1,0 +1,6 @@
+framework module AsyncTask {
+  umbrella header "AsyncTask-umbrella.h"
+
+  export *
+  module * { export * }
+}

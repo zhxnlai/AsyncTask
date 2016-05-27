@@ -1,0 +1,6 @@
+framework module Pods_AsyncTask_Tests {
+  umbrella header "Pods-AsyncTask_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
