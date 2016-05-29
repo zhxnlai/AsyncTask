@@ -8,11 +8,7 @@
 
 import Foundation
 
-internal func getDefaultQueue() -> DispatchQueue {
-    return .UserInitiated
-}
-
-let defaultQueue = DispatchQueue.UserInitiated
+let DefaultQueue = DispatchQueue.UserInitiated
 
 let DefaultTimeout = NSTimeInterval(-1)
 

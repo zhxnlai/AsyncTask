@@ -60,13 +60,13 @@ public class ThrowingTask<T> {
 
 extension ThrowingTask : ThrowingTaskType {
 
-    public func async(queue: DispatchQueue = getDefaultQueue(), completion: (T?, ErrorType?) -> () = {_ in}) {
+    public func async(queue: DispatchQueue = DefaultQueue, completion: (T?, ErrorType?) -> () = {_ in}) {
         return task.async(queue) {result in
             result.toTuple()
         }
     }
 
-    public func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) throws -> T? {
+    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) throws -> T? {
         guard let r = task.await(queue, timeout: timeout) else { return nil }
         switch r {
         case let .Success(result):
@@ -76,8 +76,8 @@ extension ThrowingTask : ThrowingTaskType {
         }
     }
 
-    public func await(queue: DispatchQueue = getDefaultQueue()) throws -> T {
-        return try await(queue, timeout: -1)!
+    public func await(queue: DispatchQueue = DefaultQueue) throws -> T {
+        return try await(queue, timeout: DefaultTimeout)!
     }
 
 }

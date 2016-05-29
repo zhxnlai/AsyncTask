@@ -39,14 +39,14 @@ public class Task<T> {
 
 extension Task : TaskType {//, ThrowingTaskType {
 
-    public func async(queue: DispatchQueue = getDefaultQueue(), completion: CompletionHandler = {_ in}) {
+    public func async(queue: DispatchQueue = DefaultQueue, completion: CompletionHandler = {_ in}) {
         dispatch_async(queue.get()) {
             self.task(completion)
         }
     }
 
     // sync
-    public func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) -> T? {
+    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) -> T? {
         let timeout = dispatch_time_t(timeInterval: timeout)
 
         var value: T?
@@ -67,8 +67,8 @@ extension Task : TaskType {//, ThrowingTaskType {
         return value
     }
 
-    public func await(queue: DispatchQueue = getDefaultQueue()) -> T {
-        return await(queue, timeout: -1)!
+    public func await(queue: DispatchQueue = DefaultQueue) -> T {
+        return await(queue, timeout: DefaultTimeout)!
     }
 
 }
