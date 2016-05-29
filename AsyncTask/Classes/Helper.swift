@@ -13,19 +13,3 @@ internal extension dispatch_time_t {
         self.init(timeInterval < NSTimeInterval(0) ? DISPATCH_TIME_FOREVER : dispatch_time(DISPATCH_TIME_NOW, Int64(timeInterval * Double(NSEC_PER_SEC))))
     }
 }
-
-internal extension Array {
-    var indexedDictionary: [Int:Element] {
-        var result: [Int:Element] = [:]
-        for (index, element) in enumerate() {
-            result[index] = element
-        }
-        return result
-    }
-}
-
-// MARK: - Helpers
-internal func getDefaultQueue() -> DispatchQueue {
-    return .UserInitiated
-}
-

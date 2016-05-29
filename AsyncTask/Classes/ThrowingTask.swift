@@ -79,6 +79,6 @@ extension ThrowingTask : ThrowingTaskType {
     public func await(queue: DispatchQueue = getDefaultQueue()) throws -> T {
         return try await(queue, timeout: -1)!
     }
-    
+
 }
 

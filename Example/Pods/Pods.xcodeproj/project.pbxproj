@@ -11,6 +11,7 @@
 		03D2A4113A1E332CFC931CA44D37CF8D /* QCKDSL.h in Headers */ = {isa = PBXBuildFile; fileRef = 7005B0ADF96C275382B45359AE1A0FDC /* QCKDSL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05379FDF88302F8A6A9B80EC26C3AAA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAC405455F8E20BD0434D9D3E3D2879A /* Foundation.framework */; };
 		090178D11CFA3CEE0042FDBA /* ThrowingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090178D01CFA3CEE0042FDBA /* ThrowingTask.swift */; };
+		096496AD1CFB76910035B0FF /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096496AC1CFB76910035B0FF /* Config.swift */; };
 		0B56885D6E18E73DEF1E14D0D55DA67A /* QuickConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = E2353FC0C41320250E7132DE6734F885 /* QuickConfiguration.m */; };
 		0FA2B8EC8E11B167CCAEC3FACC069845 /* Pods-AsyncTask_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EC073C6F45E115F6E7DC06D9BC95168C /* Pods-AsyncTask_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		112614F21939902B59102E6E876ADCBC /* RaisesException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A414C35360A25163AA8D7D17AB68C77 /* RaisesException.swift */; };
@@ -148,6 +149,7 @@
 		03AD566EC508F35AEBD09410C38B0113 /* AllPass.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AllPass.swift; path = Sources/Nimble/Matchers/AllPass.swift; sourceTree = "<group>"; };
 		089DD10FEFD8B0E0D5EBD5EC9A1AC307 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		090178D01CFA3CEE0042FDBA /* ThrowingTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThrowingTask.swift; sourceTree = "<group>"; };
+		096496AC1CFB76910035B0FF /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		0BCFC8BB5251B4DB1F4FF8565DDA6833 /* Pods-AsyncTask_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AsyncTask_Tests-resources.sh"; sourceTree = "<group>"; };
 		0CFF847D8C75EDD1CE2BA21A60D08E00 /* Nimble-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Nimble-dummy.m"; sourceTree = "<group>"; };
 		0F2748FABD1661E3A75F8B07E115CF96 /* BeNil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeNil.swift; path = Sources/Nimble/Matchers/BeNil.swift; sourceTree = "<group>"; };
@@ -436,6 +438,7 @@
 				A455D84BF970D4246B9A03C8B213D41B /* DispatchQueue.swift */,
 				F2609FBCD7A259DC685CFED854F940D6 /* Helper.swift */,
 				E93C16AC2389BB4ECE66EEED9301433E /* Thunkify.swift */,
+				096496AC1CFB76910035B0FF /* Config.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -838,6 +841,7 @@
 				203F52DD3E86AC932D9E658368A6E2F6 /* DispatchQueue.swift in Sources */,
 				EF93F1AA652C75C105B67E29ED8A2626 /* Helper.swift in Sources */,
 				3603FADACAED2B31EB548FFA45E5E34B /* Thunkify.swift in Sources */,
+				096496AD1CFB76910035B0FF /* Config.swift in Sources */,
 				3B5813DD9F9C2E6C173B74A86AA53228 /* Collection.swift in Sources */,
 				090178D11CFA3CEE0042FDBA /* ThrowingTask.swift in Sources */,
 			);

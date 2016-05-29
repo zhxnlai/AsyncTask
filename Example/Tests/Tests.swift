@@ -260,19 +260,19 @@ class TableOfContentsSpec: QuickSpec {
 
                 Task() {
                     expect(qos_class_self()) == QOS_CLASS_USER_INTERACTIVE
-                }.await(.UserInteractive)
+                }.async(.UserInteractive)
 
                 Task() {
                     expect(qos_class_self()) == QOS_CLASS_USER_INITIATED
-                }.await(.UserInitiated)
+                }.async(.UserInitiated)
 
                 Task() {
                     expect(qos_class_self()) == QOS_CLASS_UTILITY
-                }.await(.Utility)
+                }.async(.Utility)
 
                 Task() {
                     expect(qos_class_self()) == QOS_CLASS_BACKGROUND
-                }.await(.Background)
+                }.async(.Background)
 
                 let customQueue = dispatch_queue_create("CustomQueueLabel", DISPATCH_QUEUE_CONCURRENT)
                 Task() {

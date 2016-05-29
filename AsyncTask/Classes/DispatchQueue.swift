@@ -43,3 +43,9 @@ public enum DispatchQueue {
 
 }
 
+func create() -> dispatch_queue_t {
+    let attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INTERACTIVE, -1)
+    return dispatch_queue_create("com.asynctask.concurrent.\(QOS_CLASS_USER_INTERACTIVE)", attr)
+}
+let serialQueue = create()
+

@@ -45,28 +45,25 @@ extension Task : TaskType {//, ThrowingTaskType {
         }
     }
 
-    public func async(queue: DispatchQueue = getDefaultQueue(), completion: (T?, ErrorType?) -> ()) {
-        dispatch_async(queue.get()) {
-            self.task {value in
-                completion(value, nil)
-            }
-        }
-    }
-
     // sync
     public func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) -> T? {
-        var value: T?
         let timeout = dispatch_time_t(timeInterval: timeout)
+
+        var value: T?
         let fd_sema = dispatch_semaphore_create(0)
+
         dispatch_async(queue.get()) {
             self.task {result in
                 value = result
-                dispatch_sync(queue.get()) {
-                    dispatch_semaphore_signal(fd_sema)
-                }
+                dispatch_semaphore_signal(fd_sema)
             }
         }
+
         dispatch_semaphore_wait(fd_sema, timeout)
+        // synchronize the variable
+        dispatch_sync(queue.get()) {
+            _ = value
+        }
         return value
     }
 
