@@ -11,7 +11,6 @@ class TableOfContentsSpec: QuickSpec {
         describe("task") {
 
             it("can warp expensive synchronous API") {
-
                 func encode(message: String) -> String {
                     NSThread.sleepForTimeInterval(0.1)
                     return message
@@ -47,7 +46,6 @@ class TableOfContentsSpec: QuickSpec {
 
         }
 
-
         // wrap async api
 
         describe("await") {
@@ -56,6 +54,22 @@ class TableOfContentsSpec: QuickSpec {
                 let task = Task { () -> Bool in NSThread.sleepForTimeInterval(0.3); return true }
                 expect(task.await(timeout: 0.4)) == true
                 expect(task.await(timeout: 0.2)).to(beNil())
+            }
+
+        }
+
+        describe("concurrency") {
+            let numbers: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+            it("should return nil if timeout occurs") {
+                let printNumber = {(number: Int) in
+                    Task {
+                        NSThread.sleepForTimeInterval(1)
+                        print(number)
+                    }
+                }
+
+                numbers.map(printNumber).await()
             }
 
         }
@@ -123,7 +137,6 @@ class TableOfContentsSpec: QuickSpec {
             it("should throw if one of the task throws") {
                 expect{try numbers.map(toStringExceptZero).await()}.to(throwError())
             }
-            
 
         }
 
@@ -312,9 +325,7 @@ class TableOfContentsSpec: QuickSpec {
                 }
             }
 
-
             it("can wait synchronously") {
-
                 var a = 0
 
                 Task { NSThread.sleepForTimeInterval(0.05); expect(a) == 1 }.async()

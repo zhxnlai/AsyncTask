@@ -8,16 +8,25 @@
 
 import Foundation
 
+let DefaultConcurrency = 10
+
 extension Dictionary where Value : ThrowingTaskType {
 
     private typealias ReturnType = Value.ReturnType
 
-    public func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) throws -> [Key: ReturnType?] {
+    public func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency, timeout: NSTimeInterval) throws -> [Key: ReturnType?] {
+        let dispatchTimeout = dispatch_time_t(timeInterval: timeout)
         let group = dispatch_group_create()
+        let fd_sema = dispatch_semaphore_create(concurrency)
+
         var results = [Key: Result<ReturnType>?]()
         for (key, task) in self {
             results.updateValue(nil, forKey: key)
             dispatch_group_async(group, queue.get()) {
+                dispatch_semaphore_wait(fd_sema, dispatchTimeout)
+                defer {
+                    dispatch_semaphore_signal(fd_sema)
+                }
                 do {
                     if let r = try task.await(queue, timeout: timeout) {
                         results[key] = Result.Success(r)
@@ -30,7 +39,7 @@ extension Dictionary where Value : ThrowingTaskType {
             }
         }
 
-        dispatch_group_wait(group, dispatch_time_t(timeInterval: timeout))
+        dispatch_group_wait(group, dispatchTimeout)
 
         var ret = [Key: ReturnType?]()
 
@@ -50,9 +59,9 @@ extension Dictionary where Value : ThrowingTaskType {
         return ret
     }
 
-    public func await(queue: DispatchQueue = getDefaultQueue()) throws -> [Key: ReturnType] {
+    public func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency) throws -> [Key: ReturnType] {
         var results = [Key: ReturnType]()
-        for (key, value) in try await(queue, timeout: -1) {
+        for (key, value) in try await(queue, concurrency: concurrency, timeout: -1) {
             results.updateValue(value!, forKey: key)
         }
         return results
@@ -62,12 +71,12 @@ extension Dictionary where Value : ThrowingTaskType {
 
 public extension Array where Element : ThrowingTaskType {
 
-    func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) throws -> [Element.ReturnType?] {
-        return try indexedDictionary.await(queue, timeout: timeout).sort({ $0.0 < $1.0 }).map({$0.1})
+    func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency, timeout: NSTimeInterval) throws -> [Element.ReturnType?] {
+        return try indexedDictionary.await(queue, concurrency: concurrency, timeout: timeout).sort({ $0.0 < $1.0 }).map({$0.1})
     }
 
-    func await(queue: DispatchQueue = getDefaultQueue()) throws -> [Element.ReturnType] {
-        return try indexedDictionary.await(queue).sort({ $0.0 < $1.0 }).map({$0.1})
+    func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency) throws -> [Element.ReturnType] {
+        return try indexedDictionary.await(queue, concurrency: concurrency).sort({ $0.0 < $1.0 }).map({$0.1})
     }
 
 }
@@ -82,24 +91,24 @@ public extension Dictionary where Value : TaskType {
         return ret
     }
 
-    func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) -> [Key: Value.ReturnType?] {
-        return try! toThrowingTasks().await(queue, timeout: timeout)
+    func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency, timeout: NSTimeInterval) -> [Key: Value.ReturnType?] {
+        return try! toThrowingTasks().await(queue, concurrency: concurrency, timeout: timeout)
     }
 
-    func await(queue: DispatchQueue = getDefaultQueue()) -> [Key: Value.ReturnType] {
-        return try! toThrowingTasks().await(queue)
+    func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency) -> [Key: Value.ReturnType] {
+        return try! toThrowingTasks().await(queue, concurrency: concurrency)
     }
 
 }
 
 public extension Array where Element : TaskType {
 
-    func await(queue: DispatchQueue = getDefaultQueue(), timeout: NSTimeInterval) -> [Element.ReturnType?] {
-        return indexedDictionary.await(queue, timeout: timeout).sort({ $0.0 < $1.0 }).map({$0.1})
+    func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency, timeout: NSTimeInterval) -> [Element.ReturnType?] {
+        return indexedDictionary.await(queue, concurrency: concurrency, timeout: timeout).sort({ $0.0 < $1.0 }).map({$0.1})
     }
 
-    func await(queue: DispatchQueue = getDefaultQueue()) -> [Element.ReturnType] {
-        return indexedDictionary.await(queue).sort({ $0.0 < $1.0 }).map({$0.1})
+    func await(queue: DispatchQueue = getDefaultQueue(), concurrency: Int = DefaultConcurrency) -> [Element.ReturnType] {
+        return indexedDictionary.await(queue, concurrency: concurrency).sort({ $0.0 < $1.0 }).map({$0.1})
     }
     
 }

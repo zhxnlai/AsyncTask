@@ -55,6 +55,7 @@ public class ThrowingTask<T> {
             }
         }
     }
+
 }
 
 extension ThrowingTask : ThrowingTaskType {

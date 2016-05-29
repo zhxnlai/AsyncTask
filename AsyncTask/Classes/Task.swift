@@ -39,14 +39,12 @@ public class Task<T> {
 
 extension Task : TaskType {//, ThrowingTaskType {
 
-    // return async
     public func async(queue: DispatchQueue = getDefaultQueue(), completion: CompletionHandler = {_ in}) {
         dispatch_async(queue.get()) {
             self.task(completion)
         }
     }
 
-    //  = {_ in}
     public func async(queue: DispatchQueue = getDefaultQueue(), completion: (T?, ErrorType?) -> ()) {
         dispatch_async(queue.get()) {
             self.task {value in
@@ -75,6 +73,5 @@ extension Task : TaskType {//, ThrowingTaskType {
     public func await(queue: DispatchQueue = getDefaultQueue()) -> T {
         return await(queue, timeout: -1)!
     }
-
 
 }
