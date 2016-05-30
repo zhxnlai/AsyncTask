@@ -14,6 +14,7 @@ import Foundation
 
 public protocol TaskType {
     associatedtype ReturnType
+
     var task: (ReturnType -> ()) -> () { get }
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue, timeout: NSTimeInterval) -> ReturnType?
@@ -21,13 +22,11 @@ public protocol TaskType {
 }
 
 // TODO: non escaping
-public class Task<ReturnType> {
+public class Task<ReturnType> : TaskType {
 
-    public typealias CompletionHandler = ReturnType -> ()
+    public let task: (ReturnType -> ()) -> ()
 
-    public let task: CompletionHandler -> ()
-
-    public init(task: CompletionHandler -> ()) {
+    public init(task: (ReturnType -> ()) -> ()) {
         self.task = task
     }
 
@@ -37,15 +36,14 @@ public class Task<ReturnType> {
 
 }
 
-extension Task : TaskType {//, ThrowingTaskType {
+extension TaskType {
 
-    public func async(queue: DispatchQueue = DefaultQueue, completion: CompletionHandler = {_ in}) {
+    public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType -> ()) = {_ in}) {
         dispatch_async(queue.get()) {
             self.task(completion)
         }
     }
 
-    // sync
     public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) -> ReturnType? {
         let timeout = dispatch_time_t(timeInterval: timeout)
 
