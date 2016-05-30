@@ -15,58 +15,63 @@ public protocol ThrowingTaskType {
     func await(queue: DispatchQueue) throws -> ReturnType
 }
 
+internal enum Result<ReturnType> {
 
-internal enum Result<T> {
-    case Success(T)
+    case Success(ReturnType)
     case Failure(ErrorType)
 
-    func toTuple() -> (T?, ErrorType?) {
-        switch self {
-        case .Success(let v):
-            return (v, nil)
-        case .Failure(let e):
-            return (nil, e)
-        }
-    }
-}
-
-public class ThrowingTask<T> {
-
-    private let task: Task<Result<T>>
-
-    private init(task: (Result<T> -> ()) -> ()) {
-        self.task = Task(task: task)
-    }
-
-    public convenience init<V: TaskType where V.ReturnType == T>(task: V) {
-        self.init {(callback: Result<T> -> ()) in
-            task.task {value in
-                callback(Result.Success(value))
+    var tuple : (ReturnType?, ErrorType?) {
+        get {
+            switch self {
+            case .Success(let result):
+                return (result, nil)
+            case .Failure(let error):
+                return (nil, error)
             }
         }
     }
 
-    public convenience init(task: () throws -> T) {
-        self.init {(callback: Result<T> -> ()) in
+}
+
+public class ThrowingTask<ReturnType> {
+
+    private let task: Task<Result<ReturnType>>
+
+    private init(task: Task<Result<ReturnType>>) {
+        self.task = task
+    }
+
+    public convenience init(task: () throws -> ReturnType) {
+        self.init(task: Task {(callback: Result<ReturnType> -> ()) in
             do {
                 callback(Result.Success(try task()))
             } catch {
                 callback(Result.Failure(error))
             }
-        }
+            }
+        )
+    }
+
+    public convenience init<T: TaskType where T.ReturnType == ReturnType>(task: T) {
+        self.init(task: Task {(callback: Result<ReturnType> -> ()) in
+                task.task {result in
+                    callback(Result.Success(result))
+                }
+            }
+        )
     }
 
 }
 
 extension ThrowingTask : ThrowingTaskType {
 
-    public func async(queue: DispatchQueue = DefaultQueue, completion: (T?, ErrorType?) -> () = {_ in}) {
+    public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType?, ErrorType?) -> () = {_ in}) {
         return task.async(queue) {result in
-            result.toTuple()
+            result.tuple
         }
     }
 
-    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) throws -> T? {
+    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) throws -> ReturnType? {
         guard let r = task.await(queue, timeout: timeout) else { return nil }
         switch r {
         case let .Success(result):
@@ -76,7 +81,7 @@ extension ThrowingTask : ThrowingTaskType {
         }
     }
 
-    public func await(queue: DispatchQueue = DefaultQueue) throws -> T {
+    public func await(queue: DispatchQueue = DefaultQueue) throws -> ReturnType {
         return try await(queue, timeout: DefaultTimeout)!
     }
 

@@ -432,13 +432,13 @@
 		627155869B1E273591A0140AD825FB06 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				096496AC1CFB76910035B0FF /* Config.swift */,
 				CA68FBFD56D4E83C6D28D30D55F00B2E /* Task.swift */,
 				090178D01CFA3CEE0042FDBA /* ThrowingTask.swift */,
 				CBC4F1920DA85007C78E96D71168029F /* Collection.swift */,
 				A455D84BF970D4246B9A03C8B213D41B /* DispatchQueue.swift */,
 				F2609FBCD7A259DC685CFED854F940D6 /* Helper.swift */,
 				E93C16AC2389BB4ECE66EEED9301433E /* Thunkify.swift */,
-				096496AC1CFB76910035B0FF /* Config.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";

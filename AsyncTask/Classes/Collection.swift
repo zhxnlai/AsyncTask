@@ -29,9 +29,7 @@ extension Dictionary where Value : ThrowingTaskType {
                         results[key] = nil
                     }
                 } catch {
-                    dispatch_sync(serialQueue) {
-                        results[key] = Result.Failure(error)
-                    }
+                    results[key] = Result.Failure(error)
                 }
 
                 dispatch_semaphore_signal(fd_sema)
@@ -59,8 +57,6 @@ extension Dictionary where Value : ThrowingTaskType {
     }
 
     public func await(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) throws -> [Key: ReturnType] {
-
-
         var results = [Key: ReturnType]()
         for (key, value) in try await(queue, concurrency: concurrency, timeout: DefaultTimeout) {
             results.updateValue(value!, forKey: key)
@@ -116,6 +112,7 @@ public extension Array where Element : TaskType {
     
 }
 
+// internal
 internal extension Dictionary where Key : Comparable {
 
     var sortedValues : [Value] {

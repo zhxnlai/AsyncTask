@@ -21,9 +21,9 @@ public protocol TaskType {
 }
 
 // TODO: non escaping
-public class Task<T> {
+public class Task<ReturnType> {
 
-    public typealias CompletionHandler = T -> ()
+    public typealias CompletionHandler = ReturnType -> ()
 
     public let task: CompletionHandler -> ()
 
@@ -31,7 +31,7 @@ public class Task<T> {
         self.task = task
     }
 
-    public convenience init(task: () -> T) {
+    public convenience init(task: () -> ReturnType) {
         self.init {callback in callback(task())}
     }
 
@@ -46,10 +46,10 @@ extension Task : TaskType {//, ThrowingTaskType {
     }
 
     // sync
-    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) -> T? {
+    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) -> ReturnType? {
         let timeout = dispatch_time_t(timeInterval: timeout)
 
-        var value: T?
+        var value: ReturnType?
         let fd_sema = dispatch_semaphore_create(0)
 
         dispatch_async(queue.get()) {
@@ -60,6 +60,7 @@ extension Task : TaskType {//, ThrowingTaskType {
         }
 
         dispatch_semaphore_wait(fd_sema, timeout)
+
         // synchronize the variable
         dispatch_sync(queue.get()) {
             _ = value
@@ -67,7 +68,7 @@ extension Task : TaskType {//, ThrowingTaskType {
         return value
     }
 
-    public func await(queue: DispatchQueue = DefaultQueue) -> T {
+    public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
         return await(queue, timeout: DefaultTimeout)!
     }
 
