@@ -7,7 +7,6 @@ import AsyncTask
 class TableOfContentsSpec: QuickSpec {
     override func spec() {
 
-        // wrap expensive sync api
         describe("task") {
 
             it("can warp expensive synchronous API") {
@@ -16,8 +15,8 @@ class TableOfContentsSpec: QuickSpec {
                     return message
                 }
 
-                let encryptMessage = {(message: String) in
-                    Task {
+                func encryptMessage(message: String) -> Task<String> {
+                    return Task {
                         encode(message)
                     }
                 }
@@ -31,9 +30,7 @@ class TableOfContentsSpec: QuickSpec {
                 let session = NSURLSession(configuration: .ephemeralSessionConfiguration())
 
                 let get = {(URL: NSURL) in
-                    Task {callback in
-                        session.dataTaskWithURL(URL, completionHandler: callback).resume()
-                    }
+                    Task { session.dataTaskWithURL(URL, completionHandler: $0).resume() }
                 }
 
                 let URL = NSURL(string: "https://httpbin.org/delay/1")!
@@ -44,56 +41,83 @@ class TableOfContentsSpec: QuickSpec {
                 expect(error).to(beNil())
             }
 
-        }
-
-        // wrap async api
-
-        describe("await") {
-
             it("should return nil if timeout occurs") {
-                let task = Task { () -> Bool in NSThread.sleepForTimeInterval(0.3); return true }
+                let task = Task<Bool> { NSThread.sleepForTimeInterval(0.3); return true }
                 expect(task.await(timeout: 0.4)) == true
                 expect(task.await(timeout: 0.2)).to(beNil())
             }
 
-        }
-
-        describe("concurrency") {
-            let numbers: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-            it("should return nil if timeout occurs") {
-                let printNumber = {(number: Int) in
+            it("can take optional value") {
+                let load = {(path: String) -> Task<NSData?> in
                     Task {
-                        NSThread.sleepForTimeInterval(1)
-                        print(number)
+                        NSThread.sleepForTimeInterval(0.05)
+                        switch path {
+                        case "profile.png":
+                            return NSData()
+                        case "index.html":
+                            return NSData()
+                        default:
+                            return nil
+                        }
                     }
                 }
 
-                numbers.map(printNumber).await()
+                expect(load("profile.png").await()).to(beTruthy())
+                expect(load("index.html").await()).to(beTruthy())
+                expect(load("random.txt").await()).to(beNil())
+            }
+
+            it("can be nested") {
+                let emptyString = Task<String> {
+                    NSThread.sleepForTimeInterval(0.05)
+                    return ""
+                }
+
+                let appendString = {(a: String, b: String) -> Task<String> in
+                    Task {
+                        NSThread.sleepForTimeInterval(0.05)
+                        return a + b
+                    }
+                }
+
+                let chainedTask = Task {(completion: String -> ()) in
+                    emptyString.async {(s: String) in
+                        expect(s) == ""
+                        appendString(s, "https://").async {(s: String) in
+                            expect(s) == "https://"
+                            appendString(s, "swift").async {(s: String) in
+                                expect(s) == "https://swift"
+                                appendString(s, ".org").async {(s: String) in
+                                    expect(s) == "https://swift.org"
+                                    completion(s)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                let sequentialTask = Task<String> {
+                    var s = emptyString.await()
+                    expect(s) == ""
+                    s = appendString(s, "https://").await()
+                    expect(s) == "https://"
+                    s = appendString(s, "swift").await()
+                    expect(s) == "https://swift"
+                    s = appendString(s, ".org").await()
+                    expect(s) == "https://swift.org"
+                    return s
+                }
+
+                expect(sequentialTask.await()) == chainedTask.await()
             }
 
         }
 
-        describe("collection") {
-
-            enum Error : ErrorType {
-                case FoundZero
-            }
-
+        describe("collection of tasks") {
             let numbers: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            let toString = {(number: Int) in
-                Task {() -> String in
-                    return "\(number)"
-                }
-            }
 
-            let toStringExceptZero = {(number: Int) in
-                ThrowingTask {() -> String in
-                    if number == 0 {
-                        throw Error.FoundZero
-                    }
-                    return "\(number)"
-                }
+            let toString = {(number: Int) -> Task<String> in
+                Task { "\(number)" }
             }
 
             it("should run serially inside for loops") {
@@ -111,7 +135,6 @@ class TableOfContentsSpec: QuickSpec {
 
             it("should run an array of closures in parallel") {
                 let results = numbers.map(toString).await()
-
                 expect(results).to(contain("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"))
             }
 
@@ -134,96 +157,37 @@ class TableOfContentsSpec: QuickSpec {
                 }
             }
 
-            it("should throw if one of the task throws") {
-                expect{try numbers.map(toStringExceptZero).await()}.to(throwError())
+            it("should limit concurrency") {
+                let wait = {(timeInterval: NSTimeInterval) -> Task<Bool> in
+                    Task {
+                        NSThread.sleepForTimeInterval(timeInterval)
+                        return true
+                    }
+                }
+
+                func waitForSeconds(seconds: Int, concurrency: Int, timeout: NSTimeInterval) -> Task<Int> {
+                    return Task {
+                        (0..<seconds).map{_ in 1}.map(wait)
+                            .await(concurrency: concurrency, timeout: timeout * 1.1)
+                            .flatMap {$0}
+                            .count
+                    }
+                }
+
+                let testcases = [(2, 1, 2.0), (2, 1, 1), (3, 3, 1), (3, 2, 2)]
+                expect(testcases.map(waitForSeconds).await()) == testcases.map {min($0, ($1 * Int($2)))}
             }
 
         }
 
-        describe("async and await") {
-            it("can be chained together") {
-                let emptyString = Task {() -> String in
-                    NSThread.sleepForTimeInterval(0.05)
-                    return ""
-                }
-
-                let appendString = {(a: String, b: String) in
-                    Task {() -> String in
-                        NSThread.sleepForTimeInterval(0.05)
-                        return a + b
-                    }
-                }
-
-                let chainedTask = Task {(completion: String -> ()) in
-                    emptyString.async {(s: String) in
-                        expect(s) == ""
-                        appendString(s, "https://").async {(s: String) in
-                            expect(s) == "https://"
-                            appendString(s, "swift").async {(s: String) in
-                                expect(s) == "https://swift"
-                                appendString(s, ".org").async {(s: String) in
-                                    expect(s) == "https://swift.org"
-                                    completion(s)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                let sequentialTask = Task {() -> String in
-                    var s = emptyString.await()
-                    expect(s) == ""
-                    s = appendString(s, "https://").await()
-                    expect(s) == "https://"
-                    s = appendString(s, "swift").await()
-                    expect(s) == "https://swift"
-                    s = appendString(s, ".org").await()
-                    expect(s) == "https://swift.org"
-                    return s
-                }
-
-                expect(sequentialTask.await()) == chainedTask.await()
-            }
-
-        }
-
-        // optional
-        describe("optional") {
-            it("can take optional") {
-                let load = {(path: String) in
-                    Task {() -> NSData? in
-                        NSThread.sleepForTimeInterval(0.05)
-                        switch path {
-                        case "profile.png":
-                            return NSData()
-                        case "index.html":
-                            return NSData()
-                        default:
-                            return nil
-                        }
-                    }
-                }
-
-                let data1 = load("profile.png").await()
-                expect(data1).to(beTruthy())
-
-                let data2 = load("index.html").await()
-                expect(data2).to(beTruthy())
-
-                let data3 = load("random.txt").await()
-                expect(data3).to(beNil())
-            }
-            
-        }
-
-        describe("throwable") {
-            it("can take throwable") {
+        describe("throwing task") {
+            it("should throw") {
                 enum Error: ErrorType {
-                    case NotFoundError
+                    case NotFound
                 }
 
-                let load = {(path: String) in
-                    ThrowingTask {() throws -> NSData in
+                let load = {(path: String) -> ThrowingTask<NSData> in
+                    ThrowingTask {
                         NSThread.sleepForTimeInterval(0.05)
                         switch path {
                         case "profile.png":
@@ -231,7 +195,7 @@ class TableOfContentsSpec: QuickSpec {
                         case "index.html":
                             return NSData()
                         default:
-                            throw Error.NotFoundError
+                            throw Error.NotFound
                         }
                     }
                 }
@@ -239,9 +203,33 @@ class TableOfContentsSpec: QuickSpec {
                 expect{try load("profile.png").await()}.notTo(throwError())
                 expect{try load("index.html").await()}.notTo(throwError())
                 expect{try load("random.txt").await()}.to(throwError())
+                expect{try [load("profile.png"), load("index.html")].await()}.notTo(throwError())
+                expect{try [load("profile.png"), load("index.html"), load("random.txt")].await()}.to(throwError())
             }
 
         }
+
+        describe("collection of throwing tasks") {
+            let numbers: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+            enum Error : ErrorType {
+                case FoundZero
+            }
+
+            let toStringExceptZero = {(number: Int) -> ThrowingTask<String> in
+                ThrowingTask {
+                    if number == 0 {
+                        throw Error.FoundZero
+                    }
+                    return "\(number)"
+                }
+            }
+
+            it("should throw if any task throws") {
+                expect{try numbers.map(toStringExceptZero).await()}.to(throwError())
+            }
+        }
+        
 
         // TODO: test performace against GCD APIs
 
@@ -289,7 +277,7 @@ class TableOfContentsSpec: QuickSpec {
             }
         }
 
-        describe("Additional") {
+        describe("task (trivial examples)") {
             it("should execute asynchronously") {
                 var a = 0
 
@@ -298,7 +286,7 @@ class TableOfContentsSpec: QuickSpec {
                     expect(a) == 0
                     a = 1
                     expect(a) == 1
-                    }.async { expect(a) == 1 }
+                }.async { expect(a) == 1 }
 
                 expect(a) == 0
                 expect(a).toEventually(equal(1), timeout: 3)

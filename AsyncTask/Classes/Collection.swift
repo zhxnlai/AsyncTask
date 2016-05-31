@@ -23,8 +23,8 @@ extension Dictionary where Value : ThrowingTaskType {
             dispatch_group_async(group, queue.get()) {
                 dispatch_semaphore_wait(fd_sema, dispatchTimeout)
                 do {
-                    if let r = try task.await(queue, timeout: timeout) {
-                        results[key] = Result.Success(r)
+                    if let result = try task.await(queue, timeout: timeout) {
+                        results[key] = Result.Success(result)
                     } else {
                         results[key] = nil
                     }
@@ -38,30 +38,22 @@ extension Dictionary where Value : ThrowingTaskType {
 
         dispatch_group_wait(group, dispatchTimeout)
 
-        var ret = [Key: ReturnType?]()
-
-        for (key, value) in results {
-            if let result = value {
-                switch result {
+        return [Key: ReturnType?](elements:
+            try results.map {(key, value) in
+                guard let value = value else {return (key, nil)}
+                switch value {
                 case .Success(let v):
-                    ret[key] = v
+                    return (key, v)
                 case .Failure(let e):
                     throw e
                 }
-            } else {
-                ret.updateValue(nil, forKey: key)
             }
-        }
-
-        return ret
+        )
     }
 
     public func await(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) throws -> [Key: ReturnType] {
-        var results = [Key: ReturnType]()
-        for (key, value) in try await(queue, concurrency: concurrency, timeout: DefaultTimeout) {
-            results.updateValue(value!, forKey: key)
-        }
-        return results
+        let elements = try await(queue, concurrency: concurrency, timeout: DefaultTimeout).map {(key, value) in (key, value!)}
+        return [Key: ReturnType](elements: elements)
     }
 
 }
@@ -73,7 +65,7 @@ public extension Array where Element : ThrowingTaskType {
     }
 
     func await(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) throws -> [Element.ReturnType] {
-        return try indexedDictionary.await(queue, concurrency: concurrency).sortedValues
+        return try await(queue, concurrency: concurrency, timeout: DefaultTimeout).map {$0!}
     }
 
 }
@@ -82,11 +74,8 @@ public extension Dictionary where Value : TaskType {
 
     var throwingTasksDictionary: [Key: ThrowingTask<Value.ReturnType>] {
         get {
-            var ret = [Key: ThrowingTask<Value.ReturnType>]()
-            for (key, value) in self {
-                ret.updateValue(ThrowingTask(task: value), forKey: key)
-            }
-            return ret
+            let elements = map {($0, ThrowingTask(action: $1))}
+            return [Key: ThrowingTask<Value.ReturnType>](elements: elements)
         }
     }
 
@@ -107,7 +96,7 @@ public extension Array where Element : TaskType {
     }
 
     func await(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) -> [Element.ReturnType] {
-        return indexedDictionary.await(queue, concurrency: concurrency).sortedValues
+        return await(queue, concurrency: concurrency, timeout: DefaultTimeout).map {$0!}
     }
     
 }
@@ -117,7 +106,7 @@ internal extension Dictionary where Key : Comparable {
 
     var sortedValues : [Value] {
         get {
-            return self.sort({ $0.0 < $1.0 }).map({$0.1})
+            return sort({ $0.0 < $1.0 }).map({$0.1})
         }
     }
     
@@ -135,3 +124,13 @@ internal extension Array {
 
 }
 
+internal extension Dictionary {
+
+    init(elements: [(Key, Value)]) {
+        self.init()
+        for (key, value) in elements {
+            updateValue(value, forKey: key)
+        }
+    }
+
+}

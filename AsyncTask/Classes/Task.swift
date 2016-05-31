@@ -15,32 +15,17 @@ import Foundation
 public protocol TaskType {
     associatedtype ReturnType
 
-    var task: (ReturnType -> ()) -> () { get }
+    var action: (ReturnType -> ()) -> () { get }
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue, timeout: NSTimeInterval) -> ReturnType?
     func await(queue: DispatchQueue) -> ReturnType
-}
-
-// TODO: non escaping
-public class Task<ReturnType> : TaskType {
-
-    public let task: (ReturnType -> ()) -> ()
-
-    public init(task: (ReturnType -> ()) -> ()) {
-        self.task = task
-    }
-
-    public convenience init(task: () -> ReturnType) {
-        self.init {callback in callback(task())}
-    }
-
 }
 
 extension TaskType {
 
     public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType -> ()) = {_ in}) {
         dispatch_async(queue.get()) {
-            self.task(completion)
+            self.action(completion)
         }
     }
 
@@ -51,7 +36,7 @@ extension TaskType {
         let fd_sema = dispatch_semaphore_create(0)
 
         dispatch_async(queue.get()) {
-            self.task {result in
+            self.action {result in
                 value = result
                 dispatch_semaphore_signal(fd_sema)
             }
@@ -70,4 +55,19 @@ extension TaskType {
         return await(queue, timeout: DefaultTimeout)!
     }
 
+}
+
+// TODO: non escaping
+public class Task<ReturnType> : TaskType {
+
+    public let action: (ReturnType -> ()) -> ()
+
+    public init(action: (ReturnType -> ()) -> ()) {
+        self.action = action
+    }
+
+    public convenience init(action: () -> ReturnType) {
+        self.init {callback in callback(action())}
+    }
+    
 }
