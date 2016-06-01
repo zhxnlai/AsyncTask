@@ -57,10 +57,10 @@ public class ThrowingTask<ReturnType> : ThrowingTaskType {
         self.action = action
     }
 
-    public convenience init(task: () throws -> ReturnType) {
+    public convenience init(action: () throws -> ReturnType) {
         self.init {(callback: Result<ReturnType> -> ()) in
             do {
-                callback(Result.Success(try task()))
+                callback(Result.Success(try action()))
             } catch {
                 callback(Result.Failure(error))
             }

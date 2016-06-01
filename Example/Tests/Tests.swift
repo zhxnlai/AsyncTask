@@ -80,7 +80,7 @@ class TableOfContentsSpec: QuickSpec {
                     }
                 }
 
-                let chainedTask = Task {(completion: String -> ()) in
+                let chainedTask = Task<String> {completion in
                     emptyString.async {(s: String) in
                         expect(s) == ""
                         appendString(s, "https://").async {(s: String) in
@@ -230,6 +230,27 @@ class TableOfContentsSpec: QuickSpec {
             }
         }
         
+//        describe("cancellable task") {
+//
+//            it("can be cancelled") {
+//
+//                let cancelToken = CancelToken()
+//
+//                let test = {() -> CancallableTask<Bool> in
+//                    CancallableTask {
+//                        NSThread.sleepForTimeInterval(1)
+//                        return true
+//                    }
+//                }
+//
+////                [Task {
+////                    test().await(cancelToken: cancelToken)
+////                }]
+//
+//            }
+//            
+//        }
+
 
         // TODO: test performace against GCD APIs
 
