@@ -67,13 +67,13 @@ public class ThrowingTask<ReturnType> : ThrowingTaskType {
         }
     }
 
-    public convenience init<T: TaskType where T.ReturnType == ReturnType>(action: T) {
+    public convenience init<T: TaskType where T.ReturnType == ReturnType>(task: T) {
         self.init{(callback: Result<ReturnType> -> ()) in
-            action.action {result in
+            task.action {result in
                 callback(Result.Success(result))
             }
         }
     }
-
+    
 }
 
