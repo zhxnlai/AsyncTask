@@ -8,26 +8,10 @@
 
 import Foundation
 
-public enum Result<ReturnType> {
-
-    case Success(ReturnType)
-    case Failure(ErrorType)
-
-    func extract() throws -> ReturnType {
-        switch self {
-        case .Success(let value):
-            return value
-        case .Failure(let error):
-            throw error
-        }
-    }
-
-}
-
-public protocol ThrowingTaskType {
+public protocol ThrowingTaskType : BaseTaskType {
     associatedtype ReturnType
 
-    var action: (Result<ReturnType> -> ()) -> () { get }
+    var baseTask: BaseTask<ReturnType> { get }
     func async(queue: DispatchQueue, completion: Result<ReturnType> -> ())
     func await(queue: DispatchQueue, timeout: NSTimeInterval) throws -> ReturnType?
     func await(queue: DispatchQueue) throws -> ReturnType
@@ -36,25 +20,35 @@ public protocol ThrowingTaskType {
 extension ThrowingTaskType {
 
     public func async(queue: DispatchQueue = DefaultQueue, completion: Result<ReturnType> -> () = {_ in}) {
-        return Task(action: action).async(queue, completion: completion)
+        return baseTask.asyncResult(queue, completion: completion)
     }
 
     public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) throws -> ReturnType? {
-        return try Task(action: action).await(queue, timeout: timeout)?.extract()
+        return try baseTask.awaitResult(queue, timeout: timeout)?.extract()
     }
 
     public func await(queue: DispatchQueue = DefaultQueue) throws -> ReturnType {
-        return try await(queue, timeout: DefaultTimeout)!
+        return try await(queue, timeout: TimeoutForever)!
     }
     
 }
 
 public class ThrowingTask<ReturnType> : ThrowingTaskType {
 
-    public let action: (Result<ReturnType> -> ()) -> ()
+    public let baseTask: BaseTask<ReturnType>
 
-    private init(action: (Result<ReturnType> -> ()) -> ()) {
-        self.action = action
+    public var action: (Result<ReturnType> -> ()) -> () {
+        get {
+            return baseTask.action
+        }
+    }
+
+    public init(action: (Result<ReturnType> -> ()) -> ()) {
+        baseTask = BaseTask(action: action)
+    }
+
+    public init(action: () -> Result<ReturnType>) {
+        baseTask = BaseTask(action: action)
     }
 
     public convenience init(action: () throws -> ReturnType) {
@@ -63,14 +57,6 @@ public class ThrowingTask<ReturnType> : ThrowingTaskType {
                 callback(Result.Success(try action()))
             } catch {
                 callback(Result.Failure(error))
-            }
-        }
-    }
-
-    public convenience init<T: TaskType where T.ReturnType == ReturnType>(task: T) {
-        self.init{(callback: Result<ReturnType> -> ()) in
-            task.action {result in
-                callback(Result.Success(result))
             }
         }
     }

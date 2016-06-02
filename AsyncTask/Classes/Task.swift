@@ -12,10 +12,10 @@ import Foundation
 
 // Task subclass of Throwing Task?
 
-public protocol TaskType {
+public protocol TaskType : BaseTaskType {
     associatedtype ReturnType
 
-    var action: (ReturnType -> ()) -> () { get }
+    var baseTask: BaseTask<ReturnType> { get }
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue, timeout: NSTimeInterval) -> ReturnType?
     func await(queue: DispatchQueue) -> ReturnType
@@ -24,8 +24,10 @@ public protocol TaskType {
 extension TaskType {
 
     public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType -> ()) = {_ in}) {
-        dispatch_async(queue.get()) {
-            self.action(completion)
+        baseTask.asyncResult(queue) {result in
+            if case let .Success(r) = result {
+                completion(r)
+            }
         }
     }
 
@@ -35,9 +37,9 @@ extension TaskType {
         var value: ReturnType?
         let fd_sema = dispatch_semaphore_create(0)
 
-        dispatch_async(queue.get()) {
-            self.action {result in
-                value = result
+        baseTask.asyncResult(queue) {result in
+            if case let .Success(r) = result {
+                value = r
                 dispatch_semaphore_signal(fd_sema)
             }
         }
@@ -52,22 +54,31 @@ extension TaskType {
     }
 
     public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
-        return await(queue, timeout: DefaultTimeout)!
+        return await(queue, timeout: TimeoutForever)!
     }
 
 }
 
-// TODO: non escaping
 public class Task<ReturnType> : TaskType {
 
-    public let action: (ReturnType -> ()) -> ()
+    public let baseTask: BaseTask<ReturnType>
+
+    public var action: (Result<ReturnType> -> ()) -> () {
+        get {
+            return baseTask.action
+        }
+    }
 
     public init(action: (ReturnType -> ()) -> ()) {
-        self.action = action
+        baseTask = BaseTask<ReturnType> {callback in
+            action {r in
+                callback(Result.Success(r))
+            }
+        }
     }
 
     public convenience init(action: () -> ReturnType) {
         self.init {callback in callback(action())}
     }
-    
+
 }

@@ -10,6 +10,6 @@ import Foundation
 
 let DefaultQueue = DispatchQueue.UserInitiated
 
-let DefaultTimeout = NSTimeInterval(-1)
+let TimeoutForever = NSTimeInterval(-1)
 
 let DefaultConcurrency = Int.max
