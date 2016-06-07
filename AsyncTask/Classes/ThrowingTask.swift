@@ -15,6 +15,11 @@ public protocol ThrowingTaskType : BaseTaskType {
     func async(queue: DispatchQueue, completion: Result<ReturnType> -> ())
     func await(queue: DispatchQueue, timeout: NSTimeInterval) throws -> ReturnType?
     func await(queue: DispatchQueue) throws -> ReturnType
+
+    func then<T>(queue: DispatchQueue, action: ReturnType throws -> T) -> ThrowingTask<T>
+    func then<T>(queue: DispatchQueue, action: Result<ReturnType> throws -> T) -> ThrowingTask<T>
+    // catch error
+    func then<T>(queue: DispatchQueue, action: Result<ReturnType> -> T) -> Task<T>
 }
 
 extension ThrowingTaskType {
@@ -30,7 +35,25 @@ extension ThrowingTaskType {
     public func await(queue: DispatchQueue = DefaultQueue) throws -> ReturnType {
         return try await(queue, timeout: TimeoutForever)!
     }
-    
+
+    public func then<T>(queue: DispatchQueue = DefaultQueue, action: ReturnType -> T) -> ThrowingTask<T> {
+        return ThrowingTask {
+            action(try self.await(queue))
+        }
+    }
+
+    public func then<T>(queue: DispatchQueue = DefaultQueue, action: Result<ReturnType> throws -> T) -> ThrowingTask<T> {
+        return ThrowingTask {
+            try action(self.awaitResult(queue))
+        }
+    }
+
+    public func then<T>(queue: DispatchQueue = DefaultQueue, action: Result<ReturnType> -> T) -> Task<T> {
+        return Task {
+            action(self.awaitResult(queue))
+        }
+    }
+
 }
 
 public class ThrowingTask<ReturnType> : ThrowingTaskType {

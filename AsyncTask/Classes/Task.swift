@@ -12,6 +12,11 @@ import Foundation
 
 // Task subclass of Throwing Task?
 
+// replace timeout with invalidate
+
+// https://www.dartlang.org/docs/tutorials/futures/
+// then
+
 public protocol TaskType : BaseTaskType {
     associatedtype ReturnType
 
@@ -19,6 +24,9 @@ public protocol TaskType : BaseTaskType {
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue, timeout: NSTimeInterval) -> ReturnType?
     func await(queue: DispatchQueue) -> ReturnType
+
+    func then<T>(queue: DispatchQueue, action: ReturnType -> T) -> Task<T>
+    func then<T>(queue: DispatchQueue, action: ReturnType throws -> T) -> ThrowingTask<T>
 }
 
 extension TaskType {
@@ -55,6 +63,18 @@ extension TaskType {
 
     public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
         return await(queue, timeout: TimeoutForever)!
+    }
+
+    public func then<T>(queue: DispatchQueue = DefaultQueue, action: ReturnType -> T) -> Task<T> {
+        return Task {
+            action(self.await(queue))
+        }
+    }
+
+    public func then<T>(queue: DispatchQueue = DefaultQueue, action: ReturnType throws -> T) -> ThrowingTask<T> {
+        return ThrowingTask {
+            try action(self.await(queue))
+        }
     }
 
 }
