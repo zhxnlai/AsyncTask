@@ -31,8 +31,6 @@ public protocol BaseTaskType {
     func asyncResult(queue: DispatchQueue, completion: Result<ReturnType> -> ())
     func awaitResult(queue: DispatchQueue, timeout: NSTimeInterval) -> Result<ReturnType>?
     func awaitResult(queue: DispatchQueue) -> Result<ReturnType>
-
-    func then<T>(queue: DispatchQueue, action: Result<ReturnType> -> Result<T>) -> BaseTask<T>
 }
 
 extension BaseTaskType {
@@ -67,12 +65,6 @@ extension BaseTaskType {
 
     public func awaitResult(queue: DispatchQueue = DefaultQueue) -> Result<ReturnType> {
         return awaitResult(queue, timeout: TimeoutForever)!
-    }
-
-    public func then<T>(queue: DispatchQueue = DefaultQueue, action: Result<ReturnType> -> Result<T>) -> BaseTask<T> {
-        return BaseTask {
-            return action(self.awaitResult(queue))
-        }
     }
 
 }

@@ -251,32 +251,6 @@ class TableOfContentsSpec: QuickSpec {
 //            
 //        }
 
-        describe("tasks") {
-            it("can then") {
-                enum Error: ErrorType {
-                    case NotFound
-                }
-
-                let emptyString = Task<String> {
-                    NSThread.sleepForTimeInterval(0.05)
-                    return ""
-                }
-
-//                let appendString = {(a: String, b: String) -> Task<String> in
-//                    Task {
-//                        NSThread.sleepForTimeInterval(0.05)
-//                        return a + b
-//                    }
-//                }
-
-                _ = emptyString.then {s in
-                    s + "https://"
-                    }.then {s in
-                        throw Error.NotFound
-                    }.then {_ in "z"}.await()
-
-            }
-        }
 
         // TODO: test performace against GCD APIs
 
