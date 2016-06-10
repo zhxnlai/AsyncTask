@@ -13,7 +13,7 @@ public enum Result<ReturnType> {
     case Success(ReturnType)
     case Failure(ErrorType)
 
-    func extract() throws -> ReturnType {
+    public func extract() throws -> ReturnType {
         switch self {
         case .Success(let value):
             return value
@@ -29,7 +29,6 @@ public protocol BaseTaskType {
 
     var action: (Result<ReturnType> -> ()) -> () { get }
     func asyncResult(queue: DispatchQueue, completion: Result<ReturnType> -> ())
-    func awaitResult(queue: DispatchQueue, timeout: NSTimeInterval) -> Result<ReturnType>?
     func awaitResult(queue: DispatchQueue) -> Result<ReturnType>
 }
 
@@ -41,8 +40,8 @@ extension BaseTaskType {
         }
     }
 
-    public func awaitResult(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) -> Result<ReturnType>? {
-        let timeout = dispatch_time_t(timeInterval: timeout)
+    public func awaitResult(queue: DispatchQueue = DefaultQueue) -> Result<ReturnType> {
+        let timeout = dispatch_time_t(timeInterval: TimeoutForever)
 
         var value: Result<ReturnType>?
         let fd_sema = dispatch_semaphore_create(0)
@@ -60,11 +59,7 @@ extension BaseTaskType {
         dispatch_sync(queue.get()) {
             _ = value
         }
-        return value
-    }
-
-    public func awaitResult(queue: DispatchQueue = DefaultQueue) -> Result<ReturnType> {
-        return awaitResult(queue, timeout: TimeoutForever)!
+        return value!
     }
 
 }

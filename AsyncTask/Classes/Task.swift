@@ -22,7 +22,6 @@ public protocol TaskType : BaseTaskType {
 
     var baseTask: BaseTask<ReturnType> { get }
     func async(queue: DispatchQueue, completion: ReturnType -> ())
-    func await(queue: DispatchQueue, timeout: NSTimeInterval) -> ReturnType?
     func await(queue: DispatchQueue) -> ReturnType
 }
 
@@ -36,8 +35,8 @@ extension TaskType {
         }
     }
 
-    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) -> ReturnType? {
-        let timeout = dispatch_time_t(timeInterval: timeout)
+    public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
+        let timeout = dispatch_time_t(timeInterval: TimeoutForever)
 
         var value: ReturnType?
         let fd_sema = dispatch_semaphore_create(0)
@@ -55,11 +54,7 @@ extension TaskType {
         dispatch_sync(queue.get()) {
             _ = value
         }
-        return value
-    }
-
-    public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
-        return await(queue, timeout: TimeoutForever)!
+        return value!
     }
 
 }

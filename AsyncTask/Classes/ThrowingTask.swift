@@ -13,7 +13,6 @@ public protocol ThrowingTaskType : BaseTaskType {
 
     var baseTask: BaseTask<ReturnType> { get }
     func async(queue: DispatchQueue, completion: Result<ReturnType> -> ())
-    func await(queue: DispatchQueue, timeout: NSTimeInterval) throws -> ReturnType?
     func await(queue: DispatchQueue) throws -> ReturnType
 }
 
@@ -23,12 +22,8 @@ extension ThrowingTaskType {
         return baseTask.asyncResult(queue, completion: completion)
     }
 
-    public func await(queue: DispatchQueue = DefaultQueue, timeout: NSTimeInterval) throws -> ReturnType? {
-        return try baseTask.awaitResult(queue, timeout: timeout)?.extract()
-    }
-
     public func await(queue: DispatchQueue = DefaultQueue) throws -> ReturnType {
-        return try await(queue, timeout: TimeoutForever)!
+        return try baseTask.awaitResult(queue).extract()
     }
 
 }
