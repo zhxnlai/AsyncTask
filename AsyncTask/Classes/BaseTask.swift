@@ -56,9 +56,9 @@ extension BaseTaskType {
         dispatch_semaphore_wait(fd_sema, timeout)
 
         // synchronize the variable
-        dispatch_sync(queue.get()) {
-            _ = value
-        }
+//        dispatch_sync(queue.get()) {
+//            _ = value
+//        }
         return value!
     }
 

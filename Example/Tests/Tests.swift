@@ -48,18 +48,50 @@ class TableOfContentsSpec: QuickSpec {
                     Task { "\(number)" }
                 }
 
-                let toStringAfter = {(number: Int, timeout: NSTimeInterval) -> Task<String> in
+                let timeout = {(timeout: NSTimeInterval) -> Task<Void> in
+                    Task { NSThread.sleepForTimeInterval(timeout) }
+                }
+
+                let toStringAfter = {(number: Int, timeoutInterval: NSTimeInterval) -> Task<String> in
                     Task {
-                        NSThread.sleepForTimeInterval(timeout)
-                        return "\(number)"
+                        timeout(timeoutInterval).await()
+                        return toString(number).await()
                     }
                 }
 
                 it("should await first") {
-                    let result = numbers.shuffle().map {number in toStringAfter(number, NSTimeInterval(number + 1))}.awaitFirstResult()
-                    //                !.extract()
-                    expect(try! result.extract()) == "0"
+                    let result = numbers.shuffle().map {number in toStringAfter(number, NSTimeInterval(number + 1))}.awaitFirst()
+                    expect(result) == "0"
                 }
+
+//                it("should await first") {
+//                    enum Error : ErrorType {
+//                        case Timeout
+//                    }
+//
+//
+//                    let task1 = ThrowingTask<String> {() throws -> String in
+//                        timeout(2).await()
+////                        if false {
+////                            throw Error.Timeout
+////                        }
+//                        return "aa"
+//                    }
+//
+//                    let task2 = ThrowingTask<String> {
+//                        timeout(1).await()
+//                        throw Error.Timeout
+//                        return ""
+//                    }
+//
+////                    switch [].awaitFirst() {
+////                        case
+////                    }
+//
+////                    expect{try [task1, task2].awaitFirst()}.to(throwError())
+//
+////                    expect(result) == "0"
+//                }
 
                 it("should run serially inside for loops") {
                     var results = [String]()
@@ -76,23 +108,24 @@ class TableOfContentsSpec: QuickSpec {
 
                 it("should run an array of closures in parallel") {
                     for _ in 0..<1000 {
-                        let results = numbers.map(toString).await()
+                        let results = numbers.map(toString).awaitAll()
                         expect(results).to(contain("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"))
                     }
                 }
 
                 it("should run an array of closures in parallel") {
-                    for _ in 0..<100 {
-                        let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).await()
-                        expect(results.count) == 500
-                    }
+                    let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).awaitAll()
+                    expect(results.count) == 500
+//                    for _ in 0..<100 {
+//                        let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).awaitAll()
+//                        expect(results.count) == 500
+//                    }
                 }
 
                 it("should handle a large group of tasks") {
-                    let results = (0..<50000).map({n in toStringAfter(n, 0.0001)}).await()
+                    let results = (0..<50000).map({n in toStringAfter(n, 0.0001)}).awaitAll()
                     expect(results.count) == 50000
                 }
-
 
                 it("should run a dictionary of closures in parallel") {
                     var tasks = [Int: Task<String>]()
@@ -167,8 +200,8 @@ class TableOfContentsSpec: QuickSpec {
                     expect{try load("profile.png").await()}.notTo(throwError())
                     expect{try load("index.html").await()}.notTo(throwError())
                     expect{try load("random.txt").await()}.to(throwError())
-                    expect{try [load("profile.png"), load("index.html")].await()}.notTo(throwError())
-                    expect{try [load("profile.png"), load("index.html"), load("random.txt")].await()}.to(throwError())
+                    expect{try [load("profile.png"), load("index.html")].awaitAll()}.notTo(throwError())
+                    expect{try [load("profile.png"), load("index.html"), load("random.txt")].awaitAll()}.to(throwError())
                 }
 
             }
@@ -190,7 +223,7 @@ class TableOfContentsSpec: QuickSpec {
                 }
 
                 it("should throw if any task throws") {
-                    expect{try numbers.map(toStringExceptZero).await()}.to(throwError())
+                    expect{try numbers.map(toStringExceptZero).awaitAll()}.to(throwError())
                 }
             }
 

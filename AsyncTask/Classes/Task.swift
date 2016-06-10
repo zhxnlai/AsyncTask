@@ -36,25 +36,7 @@ extension TaskType {
     }
 
     public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
-        let timeout = dispatch_time_t(timeInterval: TimeoutForever)
-
-        var value: ReturnType?
-        let fd_sema = dispatch_semaphore_create(0)
-
-        baseTask.asyncResult(queue) {result in
-            if case let .Success(r) = result {
-                value = r
-                dispatch_semaphore_signal(fd_sema)
-            }
-        }
-
-        dispatch_semaphore_wait(fd_sema, timeout)
-
-        // synchronize the variable
-        dispatch_sync(queue.get()) {
-            _ = value
-        }
-        return value!
+        return try! baseTask.awaitResult(queue).extract()
     }
 
 }
