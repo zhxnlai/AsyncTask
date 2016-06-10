@@ -64,34 +64,19 @@ class TableOfContentsSpec: QuickSpec {
                     expect(result) == "0"
                 }
 
-//                it("should await first") {
-//                    enum Error : ErrorType {
-//                        case Timeout
-//                    }
-//
-//
-//                    let task1 = ThrowingTask<String> {() throws -> String in
-//                        timeout(2).await()
-////                        if false {
-////                            throw Error.Timeout
-////                        }
-//                        return "aa"
-//                    }
-//
-//                    let task2 = ThrowingTask<String> {
-//                        timeout(1).await()
-//                        throw Error.Timeout
-//                        return ""
-//                    }
-//
-////                    switch [].awaitFirst() {
-////                        case
-////                    }
-//
-////                    expect{try [task1, task2].awaitFirst()}.to(throwError())
-//
-////                    expect(result) == "0"
-//                }
+                it("should await first") {
+                    let task1 = Task<String?> {
+                        timeout(2).await()
+                        return "aa"
+                    }
+
+                    let task2 = Task<String?> {
+                        timeout(1).await()
+                        return nil
+                    }
+
+                    expect{[task1, task2].awaitFirst()}.to(beNil())
+                }
 
                 it("should run serially inside for loops") {
                     var results = [String]()
@@ -114,17 +99,15 @@ class TableOfContentsSpec: QuickSpec {
                 }
 
                 it("should run an array of closures in parallel") {
-                    let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).awaitAll()
-                    expect(results.count) == 500
-//                    for _ in 0..<100 {
-//                        let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).awaitAll()
-//                        expect(results.count) == 500
-//                    }
+                    for _ in 0..<10 {
+                        let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).awaitAll()
+                        expect(results.count) == 500
+                    }
                 }
 
                 it("should handle a large group of tasks") {
-                    let results = (0..<50000).map({n in toStringAfter(n, 0.0001)}).awaitAll()
-                    expect(results.count) == 50000
+                    let results = (0..<5000).map({n in toStringAfter(n, 0.0001)}).awaitAll()
+                    expect(results.count) == 5000
                 }
 
                 it("should run a dictionary of closures in parallel") {

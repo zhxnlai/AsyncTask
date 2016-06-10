@@ -8,99 +8,20 @@
 
 import Foundation
 
-// TODO: await any
 extension CollectionType where Generator.Element : BaseTaskType {
 
     public func awaitFirstResult(queue: DispatchQueue = DefaultQueue) -> Result<Generator.Element.ReturnType> {
         let tasks = map{$0}
         return Task {(callback: Result<Generator.Element.ReturnType> -> ()) in
-            tasks.asyncForEach {task in callback(task.awaitResult(queue))}
+            tasks.asyncForEach(queue, transform: {task in task.awaitResult()}) { index, result in
+                callback(result)
+            }
         }.await(queue)
     }
 
     public func awaitAllResults(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) -> [Result<Generator.Element.ReturnType>] {
         let tasks = map{$0}
-
-//        let group = dispatch_group_create()
-//        let sync = NSObject()
-//        var index = 0;
-//
-//        // populate the array
-//        var results = [Result<Generator.Element.ReturnType>?](count: tasks.count, repeatedValue:nil)
-//
-//        for (index, task) in tasks.enumerate() {
-//            dispatch_group_async(group, DispatchQueue.Background.get()) {
-//                let r = task.awaitResult(queue)
-//                print(index)
-////                synchronized(sync) {
-//                    results[index] = r
-////                }
-//            }
-//        }
-//
-////        dispatch_group_notify(group, specialQueue.get()) {
-////            callback(results.flatMap {$0})
-////        }
-//
-//        dispatch_group_wait(group, dispatch_time_t(timeInterval: -1))
-//
-//        return results.flatMap {$0}
-
-
-        return Task {//(callback: ([Result<Generator.Element.ReturnType>] -> () )) in
-//            tasks.enumerate().map({$0}).concurrentMap({(index, task) in
-//                print("---\(index)")
-//                return task.awaitResult(queue)
-//                }, callback: callback)
-
-            let fd_sema = dispatch_semaphore_create(0)
-
-//            let group = dispatch_group_create()
-            let sync = NSObject()
-//            var index = 0;
-
-            // populate the array
-            var results = [Result<Generator.Element.ReturnType>?](count: tasks.count, repeatedValue:nil)
-
-            dispatch_apply(tasks.count, queue.get()) {index in
-                print("submit \(index)")
-                let r = tasks[index].awaitResult(queue)
-                print("finished \(index)")
-                synchronized(sync) {
-                    print("saved---\(index)")
-                    results[index] = r
-                    dispatch_semaphore_signal(fd_sema)
-                }
-            }
-//            for (index, task) in tasks.enumerate() {
-//
-//                dispatch_async(queue.get()) {
-//                    print("submit \(index)")
-//                    let r = task.awaitResult(queue)
-//                    print("finished \(index)")
-//                    synchronized(sync) {
-//                        print("saved---\(index)")
-//                        results[index] = r
-//                        dispatch_semaphore_signal(fd_sema)
-//                    }
-//                }
-//            }
-
-            for i in 0..<tasks.count {
-
-//                print("f---\(i)")
-                print("waited---\(i)")
-                dispatch_semaphore_wait(fd_sema, dispatch_time_t(timeInterval: -1))
-            }
-
-            return results.flatMap {$0}
-//            dispatch_group_notify(group, specialQueue.get()) {
-//                callback(results.flatMap {$0})
-//            }
-
-//            dispatch_group_wait(group, dispatch_time_t(timeInterval: -1))
-
-        }.await(queue)
+        return tasks.concurrentMap(queue) {task in task.awaitResult()}
     }
 
 }
@@ -122,6 +43,10 @@ extension CollectionType where Generator.Element : ThrowingTaskType {
 }
 
 extension Dictionary where Value : ThrowingTaskType {
+
+    public func awaitFirst(queue: DispatchQueue = DefaultQueue) throws -> Value.ReturnType {
+        return try values.awaitFirstResult(queue).extract()
+    }
 
     public func awaitAll(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) throws -> [Key: Value.ReturnType] {
         let elements = Array(zip(Array(keys), try values.awaitAll(queue, concurrency: concurrency)) )
@@ -148,6 +73,10 @@ extension CollectionType where Generator.Element : TaskType {
 
 public extension Dictionary where Value : TaskType {
 
+    public func awaitFirst(queue: DispatchQueue = DefaultQueue) -> Value.ReturnType {
+        return try! values.awaitFirstResult(queue).extract()
+    }
+
     public func await(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) -> [Key: Value.ReturnType] {
         let elements = Array(zip(Array(keys), values.awaitAll(queue, concurrency: concurrency)))
         return Dictionary<Key, Value.ReturnType>(elements: elements)
@@ -167,46 +96,50 @@ internal extension Dictionary {
 
 }
 
-func synchronized(sync: AnyObject, fn: ()->()) {
-    objc_sync_enter(sync)
-    fn()
-    objc_sync_exit(sync)
-}
-
 extension Array {
 
-    func asyncForEach(body: Element -> Void) {
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+    func asyncForEach<U>(queue: DispatchQueue, transform: Element -> U, completion: (Int, U) -> ()) {
+        let fd_sema = dispatch_semaphore_create(0)
+
+        var c = 0
+        let tt = count
 
         for (index, item) in enumerate() {
-            dispatch_async(queue) {
-                body(item)
-            }
-        }
-    }
-
-    func concurrentMap<U>(transform: Element -> U, callback: [U] -> ()) {
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-        let group = dispatch_group_create()
-        let sync = NSObject()
-        var index = 0;
-
-        // populate the array
-        var results = Array<U?>(count: count, repeatedValue:nil)
-
-        for (index, item) in enumerate() {
-            dispatch_group_async(group, queue) {
-                let r = transform(item)
-                print(index)
-                synchronized(sync) {
-                    results[index] = r
+            dispatch_async(queue.get()) {
+                let result = transform(self[index])
+                dispatch_sync(DispatchQueue.getCollectionQueue().get()) {
+                    completion(index, result)
+                    c = c + 1
+                    if c == tt {
+                        dispatch_semaphore_signal(fd_sema)
+                    }
                 }
             }
         }
-        
-        dispatch_group_notify(group, queue) {
-            callback(results.flatMap {$0})
+
+        dispatch_semaphore_wait(fd_sema, dispatch_time_t(timeInterval: -1))
+    }
+
+    func concurrentMap<U>(queue: DispatchQueue, transform: Element -> U) -> [U] {
+        let fd_sema = dispatch_semaphore_create(0)
+
+        var results = [U?](count: count, repeatedValue: nil)
+        var c = 0
+        let tt = count
+
+        dispatch_apply(count, queue.get()) {index in
+            let result = transform(self[index])
+            dispatch_sync(DispatchQueue.getCollectionQueue().get()) {
+                results[index] = result
+                c = c + 1
+                if c == tt {
+                    dispatch_semaphore_signal(fd_sema)
+                }
+            }
         }
+
+        dispatch_semaphore_wait(fd_sema, dispatch_time_t(timeInterval: -1))
+        return results.flatMap {$0}
     }
 
 }
