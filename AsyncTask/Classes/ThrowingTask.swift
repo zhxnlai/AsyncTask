@@ -9,8 +9,6 @@
 import Foundation
 
 public protocol ThrowingTaskType : BaseTaskType {
-    associatedtype ReturnType
-
     var baseTask: BaseTask<ReturnType> { get }
     func async(queue: DispatchQueue, completion: Result<ReturnType> -> ())
     func await(queue: DispatchQueue) throws -> ReturnType

@@ -2,11 +2,13 @@ PODS:
   - AsyncTask (0.1.0)
   - Nimble (3.2.0)
   - Quick (0.9.2)
+  - ReactiveUI (0.0.3)
 
 DEPENDENCIES:
   - AsyncTask (from `../`)
   - Nimble (~> 3.0)
   - Quick (~> 0.8)
+  - ReactiveUI
 
 EXTERNAL SOURCES:
   AsyncTask:
@@ -16,7 +18,8 @@ SPEC CHECKSUMS:
   AsyncTask: e7bd93a2dfbfbb0bcff1713ed26aff567c4b6b50
   Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
   Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226
+  ReactiveUI: 05d1f5d884e5a2496a2cd2ac6c0ed35ab0218c02
 
-PODFILE CHECKSUM: 0315d34bd6d29fd41a1ed47df5e357dc61c6e7fe
+PODFILE CHECKSUM: ba73e9b2f9441a802562323794d3bbb93b75e213
 
 COCOAPODS: 1.0.0

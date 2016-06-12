@@ -9,7 +9,7 @@
 import UIKit
 import AsyncTask
 
-class ViewController: UIViewController {
+class ImagePickerDemoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -105,7 +105,7 @@ extension Array {
 
         for (index, item) in enumerate() {
             dispatch_async(queue.get()) {
-                let result = transform(self[index])
+                let result = transform(item)
                 dispatch_sync(DispatchQueue.getCollectionQueue().get()) {
                     completion(index, result)
                     numberOfCompletedTasks += 1

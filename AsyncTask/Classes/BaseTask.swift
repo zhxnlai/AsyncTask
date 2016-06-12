@@ -64,8 +64,8 @@ public class BaseTask<ReturnType> : BaseTaskType {
 
     public let action: (Result<ReturnType> -> ()) -> ()
 
-    public init(action: (Result<ReturnType> -> ()) -> ()) {
-        self.action = action
+    public init(action anAction: (Result<ReturnType> -> ()) -> ()) {
+        action = anAction
     }
 
     public convenience init(action: () -> Result<ReturnType>) {

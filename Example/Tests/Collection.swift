@@ -27,13 +27,13 @@ class CollectionSpec: QuickSpec {
 
             it("should in parallel") {
                 for _ in 0..<10 {
-                    let results = (0..<500).map({n in toStringAfter(n, 0.0001)}).awaitAll()
+                    let results = (0..<500).map({n in toStringAfter(n, timeoutInterval: 0.0001)}).awaitAll()
                     expect(results.count) == 500
                 }
             }
 
             it("should in parallel") {
-                let results = (0..<5000).map({n in toStringAfter(n, 0.0001)}).awaitAll()
+                let results = (0..<5000).map({n in toStringAfter(n, timeoutInterval: 0.0001)}).awaitAll()
                 expect(results.count) == 5000
             }
         }
@@ -60,7 +60,7 @@ class CollectionSpec: QuickSpec {
 
         describe("array of tasks") {
             it("can await first") {
-                let result = numbers.shuffle().map {number in toStringAfter(number, NSTimeInterval(number + 1))}.awaitFirst()
+                let result = numbers.shuffle().map {number in toStringAfter(number, timeoutInterval: NSTimeInterval(number + 1))}.awaitFirst()
                 expect(result) == "0"
             }
 
@@ -90,16 +90,16 @@ class CollectionSpec: QuickSpec {
 
 let numbers: [Int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-let toString = {(number: Int) -> Task<String> in
-    Task { "\(number)" }
+func toString(number: Int) -> Task<String> {
+    return Task { "\(number)" }
 }
 
-let timeout = {(timeout: NSTimeInterval) -> Task<Void> in
-    Task { NSThread.sleepForTimeInterval(timeout) }
+func timeout(timeout: NSTimeInterval) -> Task<Void> {
+    return Task { NSThread.sleepForTimeInterval(timeout) }
 }
 
-let toStringAfter = {(number: Int, timeoutInterval: NSTimeInterval) -> Task<String> in
-    Task {
+func toStringAfter(number: Int, timeoutInterval: NSTimeInterval) -> Task<String> {
+    return Task {
         timeout(timeoutInterval).await()
         return toString(number).await()
     }

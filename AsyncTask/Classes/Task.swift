@@ -18,7 +18,6 @@ import Foundation
 // then
 
 public protocol TaskType : BaseTaskType {
-    associatedtype ReturnType
 
     var baseTask: BaseTask<ReturnType> { get }
     func async(queue: DispatchQueue, completion: ReturnType -> ())
@@ -26,6 +25,12 @@ public protocol TaskType : BaseTaskType {
 }
 
 extension TaskType {
+
+    public var baseTask: BaseTask<ReturnType> {
+        get {
+            return BaseTask<ReturnType>(action: action)
+        }
+    }
 
     public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType -> ()) = {_ in}) {
         baseTask.asyncResult(queue) {result in
@@ -43,24 +48,18 @@ extension TaskType {
 
 public class Task<ReturnType> : TaskType {
 
-    public let baseTask: BaseTask<ReturnType>
+    public let action: (Result<ReturnType> -> ()) -> ()
 
-    public var action: (Result<ReturnType> -> ()) -> () {
-        get {
-            return baseTask.action
-        }
-    }
-
-    public init(action: (ReturnType -> ()) -> ()) {
-        baseTask = BaseTask<ReturnType> {callback in
-            action {r in
+    public init(action anAction: (ReturnType -> ()) -> ()) {
+        action = {callback in
+            anAction {r in
                 callback(Result.Success(r))
             }
         }
     }
 
-    public convenience init(action: () -> ReturnType) {
-        self.init {callback in callback(action())}
+    public convenience init(action anAction: () -> ReturnType) {
+        self.init {callback in callback(anAction())}
     }
 
 }
