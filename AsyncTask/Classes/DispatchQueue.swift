@@ -36,13 +36,6 @@ public enum DispatchQueue {
         }
     }
 
-//    static public func create(QOSClass: qos_class_t) -> dispatch_queue_t {
-//        count += 1
-//        let attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOSClass, -1)
-//        return dispatch_queue_create("com.asynctask.concurrent.\(QOSClass).\(count)", attr)
-//    }
-
-
     static public func getCollectionQueue() -> DispatchQueue {
         return .Custom(q)
     }

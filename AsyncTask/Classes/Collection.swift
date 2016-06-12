@@ -13,7 +13,7 @@ extension CollectionType where Generator.Element : BaseTaskType {
     public func awaitFirstResult(queue: DispatchQueue = DefaultQueue) -> Result<Generator.Element.ReturnType> {
         let tasks = map{$0}
         return Task {(callback: Result<Generator.Element.ReturnType> -> ()) in
-            tasks.asyncForEach(queue, transform: {task in task.awaitResult()}) { index, result in
+            tasks.concurrentForEach(queue, transform: {task in task.awaitResult()}) { index, result in
                 callback(result)
             }
         }.await(queue)
@@ -21,7 +21,7 @@ extension CollectionType where Generator.Element : BaseTaskType {
 
     public func awaitAllResults(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) -> [Result<Generator.Element.ReturnType>] {
         let tasks = map{$0}
-        return tasks.concurrentMap(queue) {task in task.awaitResult()}
+        return tasks.concurrentMap(queue, concurrency: concurrency) {task in task.awaitResult()}
     }
 
 }
@@ -71,7 +71,7 @@ extension CollectionType where Generator.Element : TaskType {
 
 }
 
-public extension Dictionary where Value : TaskType {
+extension Dictionary where Value : TaskType {
 
     public func awaitFirst(queue: DispatchQueue = DefaultQueue) -> Value.ReturnType {
         return try! values.awaitFirstResult(queue).extract()
@@ -84,8 +84,7 @@ public extension Dictionary where Value : TaskType {
 
 }
 
-// internal
-internal extension Dictionary {
+extension Dictionary {
 
     init(elements: [(Key, Value)]) {
         self.init()
@@ -98,19 +97,19 @@ internal extension Dictionary {
 
 extension Array {
 
-    func asyncForEach<U>(queue: DispatchQueue, transform: Element -> U, completion: (Int, U) -> ()) {
+    func concurrentForEach<U>(queue: DispatchQueue, transform: Element -> U, completion: (Int, U) -> ()) {
         let fd_sema = dispatch_semaphore_create(0)
 
-        var c = 0
-        let tt = count
+        var numberOfCompletedTasks = 0
+        let numberOfTasks = count
 
         for (index, item) in enumerate() {
             dispatch_async(queue.get()) {
                 let result = transform(self[index])
                 dispatch_sync(DispatchQueue.getCollectionQueue().get()) {
                     completion(index, result)
-                    c = c + 1
-                    if c == tt {
+                    numberOfCompletedTasks += 1
+                    if numberOfCompletedTasks == numberOfTasks {
                         dispatch_semaphore_signal(fd_sema)
                     }
                 }
@@ -120,21 +119,24 @@ extension Array {
         dispatch_semaphore_wait(fd_sema, dispatch_time_t(timeInterval: -1))
     }
 
-    func concurrentMap<U>(queue: DispatchQueue, transform: Element -> U) -> [U] {
+    func concurrentMap<U>(queue: DispatchQueue, concurrency: Int, transform: Element -> U) -> [U] {
         let fd_sema = dispatch_semaphore_create(0)
+        let fd_sema2 = dispatch_semaphore_create(concurrency)
 
         var results = [U?](count: count, repeatedValue: nil)
-        var c = 0
-        let tt = count
+        var numberOfCompletedTasks = 0
+        let numberOfTasks = count
 
         dispatch_apply(count, queue.get()) {index in
+            dispatch_semaphore_wait(fd_sema2, dispatch_time_t(timeInterval: -1))
             let result = transform(self[index])
             dispatch_sync(DispatchQueue.getCollectionQueue().get()) {
                 results[index] = result
-                c = c + 1
-                if c == tt {
+                numberOfCompletedTasks += 1
+                if numberOfCompletedTasks == numberOfTasks {
                     dispatch_semaphore_signal(fd_sema)
                 }
+                dispatch_semaphore_signal(fd_sema2)
             }
         }
 
