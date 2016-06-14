@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CollectionType where Generator.Element : ThrowableTaskType {
+extension SequenceType where Generator.Element : ThrowableTaskType {
 
     public func awaitFirstResult(queue: DispatchQueue = DefaultQueue) -> Result<Generator.Element.ReturnType> {
         let tasks = map{$0}
@@ -47,7 +47,7 @@ extension Dictionary where Value : ThrowableTaskType {
     
 }
 
-extension CollectionType where Generator.Element : TaskType {
+extension SequenceType where Generator.Element : TaskType {
 
     var throwableTasks: [ThrowableTask<Generator.Element.ReturnType>] {
         return map {$0.throwableTask}

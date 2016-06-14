@@ -14,7 +14,6 @@
 		09FD33271D0B78BE00E9DD34 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33261D0B78BE00E9DD34 /* Helper.swift */; };
 		09FD33321D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33281D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift */; };
 		09FD33331D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33291D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift */; };
-		09FD33351D0CEEA500E9DD34 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332B1D0CEEA500E9DD34 /* Extensions.swift */; };
 		09FD33361D0CEEA500E9DD34 /* LogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */; };
 		09FD33371D0CEEA500E9DD34 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */; };
 		09FD33381D0CEEA500E9DD34 /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332E1D0CEEA500E9DD34 /* Misc.swift */; };
@@ -51,7 +50,6 @@
 		09FD33261D0B78BE00E9DD34 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		09FD33281D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainedAnimationDemoViewController.swift; sourceTree = "<group>"; };
 		09FD33291D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadDemoViewController.swift; sourceTree = "<group>"; };
-		09FD332B1D0CEEA500E9DD34 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewController.swift; sourceTree = "<group>"; };
 		09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		09FD332E1D0CEEA500E9DD34 /* Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
@@ -169,7 +167,6 @@
 				09FD333C1D0CEED400E9DD34 /* Demos */,
 				09FD333D1D0CEF0300E9DD34 /* Base */,
 				09FD333E1D0F4E3D00E9DD34 /* Tasks */,
-				09FD332B1D0CEEA500E9DD34 /* Extensions.swift */,
 				09FD332E1D0CEEA500E9DD34 /* Misc.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -433,7 +430,6 @@
 			files = (
 				09FD33361D0CEEA500E9DD34 /* LogsTableViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ImagePickerViewController.swift in Sources */,
-				09FD33351D0CEEA500E9DD34 /* Extensions.swift in Sources */,
 				09FD33381D0CEEA500E9DD34 /* Misc.swift in Sources */,
 				09FD33421D0F4EA800E9DD34 /* RequestTasks.swift in Sources */,
 				09FD33401D0F4E8600E9DD34 /* Request.swift in Sources */,

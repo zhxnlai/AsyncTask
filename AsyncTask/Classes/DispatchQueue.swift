@@ -41,9 +41,5 @@ public enum DispatchQueue {
     }
 
 }
-//let attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_DEFAULT, -1)
-//let q = dispatch_queue_create("com.asynctask.collection", attr)
-let q = dispatch_queue_create("com.unique.name.queue", DISPATCH_QUEUE_SERIAL);
 
-
-var count = 0
+let q = dispatch_queue_create("com.asynctask.serial.queue", DISPATCH_QUEUE_SERIAL);

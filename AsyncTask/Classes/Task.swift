@@ -8,15 +8,6 @@
 
 import Foundation
 
-// compare promisekit, futurekit 
-
-// Task subclass of Throwing Task?
-
-// replace timeout with invalidate
-
-// https://www.dartlang.org/docs/tutorials/futures/
-// then
-
 public protocol TaskType {
     associatedtype ReturnType
 

@@ -10,6 +10,7 @@ import Foundation
 import AsyncTask
 
 class ImagePickerTask : NSObject {
+
     enum Error : ErrorType {
         case PhotoLibraryNotAvailable
     }
@@ -41,7 +42,7 @@ extension ImagePickerTask : ThrowableTaskType {
                 self.completionHandler = callback
 
                 self.viewController.presentViewController(controller, animated: true, completion: nil)
-                }.await(.Main)
+            }.await(.Main)
         }.action
     }
 
