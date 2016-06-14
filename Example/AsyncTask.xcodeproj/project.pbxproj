@@ -13,7 +13,7 @@
 		09FD33251D0B779000E9DD34 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33241D0B779000E9DD34 /* Collection.swift */; };
 		09FD33271D0B78BE00E9DD34 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33261D0B78BE00E9DD34 /* Helper.swift */; };
 		09FD33321D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33281D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift */; };
-		09FD33331D0CEEA500E9DD34 /* DefaultDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33291D0CEEA500E9DD34 /* DefaultDemoViewController.swift */; };
+		09FD33331D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33291D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift */; };
 		09FD33351D0CEEA500E9DD34 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332B1D0CEEA500E9DD34 /* Extensions.swift */; };
 		09FD33361D0CEEA500E9DD34 /* LogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */; };
 		09FD33371D0CEEA500E9DD34 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */; };
@@ -50,7 +50,7 @@
 		09FD33241D0B779000E9DD34 /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		09FD33261D0B78BE00E9DD34 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		09FD33281D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainedAnimationDemoViewController.swift; sourceTree = "<group>"; };
-		09FD33291D0CEEA500E9DD34 /* DefaultDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultDemoViewController.swift; sourceTree = "<group>"; };
+		09FD33291D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadDemoViewController.swift; sourceTree = "<group>"; };
 		09FD332B1D0CEEA500E9DD34 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewController.swift; sourceTree = "<group>"; };
 		09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				09FD33311D0CEEA500E9DD34 /* SleepDemoViewController.swift */,
-				09FD33291D0CEEA500E9DD34 /* DefaultDemoViewController.swift */,
+				09FD33291D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift */,
 				607FACD71AFB9204008FA782 /* ImagePickerViewController.swift */,
 				09FD33281D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift */,
 				09FD33301D0CEEA500E9DD34 /* RequestDemoViewController.swift */,
@@ -443,7 +443,7 @@
 				09FD33371D0CEEA500E9DD34 /* MenuTableViewController.swift in Sources */,
 				09FD333A1D0CEEA500E9DD34 /* RequestDemoViewController.swift in Sources */,
 				09FD33321D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift in Sources */,
-				09FD33331D0CEEA500E9DD34 /* DefaultDemoViewController.swift in Sources */,
+				09FD33331D0CEEA500E9DD34 /* ImageDownloadDemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

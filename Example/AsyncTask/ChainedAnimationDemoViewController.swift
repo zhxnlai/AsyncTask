@@ -14,24 +14,25 @@ class ChainedAnimationDemoViewController: UIViewController {
     let label = UILabel(frame: CGRectMake(0, 0, 200, 21))
 
     override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        view.backgroundColor = UIColor.whiteColor()
-//
-//        label.center = randomCenter()
-//        label.textAlignment = NSTextAlignment.Center
-//        label.text = "I'am a test label"
-//        view.addSubview(label)
-//
-//        let duration: NSTimeInterval = 1
-//
-//        Task {[weak self] in
-//            while self != nil {
-//                let completed = (UIView.animateWithDurationAsync(duration) { self?.label.center = self!.randomCenter() }).await()
-//
-//                print("animation completed: \(completed)")
-//            }
-//        }.async()
+        super.viewDidLoad()
+
+        view.backgroundColor = UIColor.whiteColor()
+
+        label.center = randomCenter()
+        label.textAlignment = NSTextAlignment.Center
+        label.text = "Test Label"
+        view.addSubview(label)
+
+        let duration: NSTimeInterval = 1
+
+        Task {[weak self] in
+            while self != nil {
+                let completed = Task<Bool> {callback in
+                    UIView.animateWithDuration(duration, animations: { self?.label.center = self!.randomCenter() }, completion: callback)
+                }.await(.Main)
+                print("animation completed: \(completed)")
+            }
+        }.async()
     }
 
     func randomCenter() -> CGPoint {

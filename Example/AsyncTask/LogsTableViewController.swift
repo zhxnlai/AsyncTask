@@ -25,11 +25,6 @@ class LogsTableViewController: UITableViewController {
         setup()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
-
     func setup() {
         dateFormatter.dateFormat = "HH:mm:ss"
     }

@@ -14,29 +14,29 @@ import Cartography
 class ImagePickerDemoViewController: UIViewController {
 
     let imageView = UIImageView()
-    let button = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        imageView.contentMode = .ScaleAspectFit
+        view = imageView
         view.backgroundColor = UIColor.whiteColor()
 
-        view.addSubview(imageView)
+        let barItem = UIBarButtonItem(title: "Launch Image Picker", style: .Plain, action: launchImagePicker)
+        let flexiableSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
 
-        button.setTitle("Pick an image", forState: .Normal)
-        button.forControlEvents(.TouchUpInside, addAction: buttonTouchUpInside)
-        view.addSubview(button)
-
-//        let button = UIButton()
-//        button.titleLabel =
-
-
+        toolbarItems = [flexiableSpace, barItem, flexiableSpace]
+        navigationController?.toolbarHidden = false
     }
 
-
-    func buttonTouchUpInside(button: UIControl) {
+    func launchImagePicker(button: UIBarButtonItem) {
         Task {
-            let data = ImagePickerTask(viewController: self).await()
+            let data = try! ImagePickerTask(viewController: self).await()
+            if let image = data?[UIImagePickerControllerOriginalImage] as? UIImage {
+                self.imageView.image = image
+            } else {
+                self.imageView.image = nil
+            }
         }.async()
     }
 

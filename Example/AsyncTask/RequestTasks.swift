@@ -15,7 +15,6 @@ class RequestsTask: NSObject {
         case Serial, Parallel
     }
 
-    private var task: Task<ReturnType>!
     let requests: [Request]
     let option: Option
     private(set) var running = false
@@ -23,19 +22,6 @@ class RequestsTask: NSObject {
     init(requests: [Request], option: Option) {
         self.requests = requests
         self.option = option
-        super.init()
-        task = Task<[NSData]> {[unowned self] in
-            self.running = true
-            var results : [NSData]!
-            switch option {
-            case .Serial:
-                results = self.requests.map {request in request.await()}
-            case .Parallel:
-                results = self.requests.awaitAll()
-            }
-            self.running = false
-            return results
-        }
     }
 
 }
@@ -43,8 +29,21 @@ class RequestsTask: NSObject {
 extension RequestsTask : TaskType {
 
     typealias ReturnType = [NSData]
-    typealias ActionType = (Result<ReturnType> -> ()) -> ()
-    var action: ActionType { get {return task.action} }
+    typealias ActionType = (ReturnType -> ()) -> ()
+    var action: ActionType {
+        return Task<ReturnType> {[unowned self] in
+            self.running = true
+            var results : [NSData]!
+            switch self.option {
+            case .Serial:
+                results = self.requests.map {request in request.await()}
+            case .Parallel:
+                results = self.requests.awaitAll()
+            }
+            self.running = false
+            return results
+        }.action
+    }
 
 }
 

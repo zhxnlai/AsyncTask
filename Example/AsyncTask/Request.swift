@@ -9,7 +9,7 @@
 import Foundation
 import AsyncTask
 
-class Request : TaskType {
+class Request {
 
     enum State {
         case Pending, Running, Finished(NSData)
@@ -24,27 +24,28 @@ class Request : TaskType {
     }
 
     private(set) var state: State = .Pending
-
     let URL: NSURL
-
-    typealias ReturnType = NSData
-    typealias ActionType = (Result<NSData> -> ()) -> ()
-
-    var action: ActionType { get {return task.action} }
-    var task: Task<NSData>!
-
     var didChange = {}
 
     init(URL aURL: NSURL) {
         URL = aURL
-        task = Task<NSData> {
+    }
+
+}
+
+extension Request : TaskType {
+
+    typealias ReturnType = NSData
+    typealias ActionType = (NSData -> ()) -> ()
+    var action: ActionType {
+        return Task<ReturnType> {
             self.state = .Running
             self.didChange()
             let data = get(self.URL).await()
             self.state = .Finished(data)
             self.didChange()
             return data
-        }
+        }.action
     }
 
 }

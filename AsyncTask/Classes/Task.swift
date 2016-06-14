@@ -17,15 +17,26 @@ import Foundation
 // https://www.dartlang.org/docs/tutorials/futures/
 // then
 
-public protocol TaskType : ThrowableTaskType {
+public protocol TaskType {
+    associatedtype ReturnType
+
+    var action: (ReturnType -> ()) -> () { get }
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue) -> ReturnType
 }
 
 extension TaskType {
 
+    public var throwableTask: ThrowableTask<ReturnType> {
+        return ThrowableTask<ReturnType>{callback in
+            self.action {result in
+                callback(Result.Success(result))
+            }
+        }
+    }
+
     public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType -> ()) = {_ in}) {
-        asyncResult(queue) {result in
+        throwableTask.asyncResult(queue) {result in
             if case let .Success(r) = result {
                 completion(r)
             }
@@ -33,21 +44,17 @@ extension TaskType {
     }
 
     public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
-        return try! awaitResult(queue).extract()
+        return try! throwableTask.awaitResult(queue).extract()
     }
 
 }
 
 public class Task<ReturnType> : TaskType {
 
-    public let action: (Result<ReturnType> -> ()) -> ()
+    public let action: (ReturnType -> ()) -> ()
 
     public init(action anAction: (ReturnType -> ()) -> ()) {
-        action = {callback in
-            anAction {r in
-                callback(Result.Success(r))
-            }
-        }
+        action = anAction
     }
 
     public convenience init(action anAction: () -> ReturnType) {

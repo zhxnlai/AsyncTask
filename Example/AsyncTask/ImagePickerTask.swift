@@ -16,35 +16,34 @@ class ImagePickerTask : NSObject {
 
     typealias CompletionHandler = [String: AnyObject]? -> ()
     var completionHandler: CompletionHandler!
-    var task: ThrowableTask<ReturnType>!
+    let viewController: UIViewController
 
     init(viewController: UIViewController) {
-        super.init()
-        task = ThrowableTask<ReturnType> {
+        self.viewController = viewController
+    }
+
+}
+
+extension ImagePickerTask : ThrowableTaskType {
+
+    typealias ReturnType = [String : AnyObject]?
+    typealias ActionType = (Result<ReturnType> -> ()) -> ()
+    var action: ActionType {
+        return ThrowableTask<ReturnType> {
             try ThrowableTask {(callback: CompletionHandler) in
                 guard UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) else {
                     throw Error.PhotoLibraryNotAvailable
                 }
                 let controller = UIImagePickerController()
 
-
-
                 controller.sourceType = .PhotoLibrary
                 controller.delegate = self
                 self.completionHandler = callback
 
-                viewController.presentViewController(controller, animated: true, completion: nil)
-            }.await(.Main)
-        }
+                self.viewController.presentViewController(controller, animated: true, completion: nil)
+                }.await(.Main)
+        }.action
     }
-
-}
-
-extension ImagePickerTask : TaskType {
-
-    typealias ReturnType = [String : AnyObject]?
-    typealias ActionType = (Result<ReturnType> -> ()) -> ()
-    var action: ActionType { get {return task.action} }
 
 }
 
@@ -59,5 +58,6 @@ extension ImagePickerTask : UIImagePickerControllerDelegate, UINavigationControl
         completionHandler(nil)
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
+
 }
 

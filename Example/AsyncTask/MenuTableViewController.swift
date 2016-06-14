@@ -13,7 +13,7 @@ class MenuTableViewController: UITableViewController {
     let demoViewControllers: [(String, UIViewController.Type)] = [
         ("Sleep", SleepDemoViewController.self),
         ("Chained Animation", ChainedAnimationDemoViewController.self),
-        ("Image Download", DefaultDemoViewController.self),
+        ("Image Download", ImageDownloadDemoViewController.self),
         ("Image Picker", ImagePickerDemoViewController.self),
         ("Network Request", RequestDemoViewController.self),]
 
