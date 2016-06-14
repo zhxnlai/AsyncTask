@@ -16,7 +16,6 @@ class MenuTableViewController: UITableViewController {
         ("Image Download", DefaultDemoViewController.self),
         ("Image Picker", ImagePickerDemoViewController.self),
         ("Network Request", RequestDemoViewController.self),]
-//        ("Parallel Requests", ParallelRequestDemoViewController.self),]
 
     override func viewDidLoad() {
         super.viewDidLoad()

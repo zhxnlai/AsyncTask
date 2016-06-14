@@ -8,196 +8,69 @@
 
 import UIKit
 import AsyncTask
+import ReactiveUI
 
-class RequestDemoViewController : UIViewController {
+class RequestDemoViewController : UITableViewController {
 
-//    var delayedRequestLoader = DelayedRequestLoader()
+    var segmentedControl: UISegmentedControl!
+    var serialRequestsTask: RequestsTask!
+    var parallelRequestsTask: RequestsTask!
+
+    var currentRequestTask: RequestsTask!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        segmentedControl = UISegmentedControl(items: ["Serial", "Parallel"])
+        segmentedControl.sizeToFit()
+        segmentedControl.selectedSegmentIndex = 0;
+        segmentedControl.forControlEvents(.ValueChanged) {_ in
+            self.updateViews()
+        }
+        navigationItem.titleView = segmentedControl
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh) {_ in
+            self.currentRequestTask.async()
+            self.updateViews()
+        }
+
+        serialRequestsTask = RequestsTask(requests: randomDelayedRequests(10), option: .Serial)
+        parallelRequestsTask = RequestsTask(requests: randomDelayedRequests(10), option: .Parallel)
+
+        updateViews()
     }
 
+    func randomDelayedRequests(numberOfRequests: Int) -> [Request] {
+        var requests = [Request]()
+        for _ in 0..<numberOfRequests {
+            let delay = random() % 5
+            let URL = NSURL.URLWithDelay(delay)
+            let request = Request(URL: URL)
+            request.didChange = updateViews
+            requests.append(request)
+        }
+        return requests
+    }
 
-//    override func reload() {
-//        requests.removeAll()
-//        for _ in 0..<numberOfRequests {
-//            let delay = random() % 10
-//            requests.append(DelayedRequest(delay: delay))
-//        }
-//
-//    }
-}
+    func updateViews() {
+        Task {
+            self.update()
+        }.async(.Main)
+    }
 
+    func update() {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            currentRequestTask = serialRequestsTask
+        } else {
+            currentRequestTask = parallelRequestsTask
+        }
+        tableView.dataSource = currentRequestTask
+        tableView.reloadData()
 
-//class Request : TaskType {
-//
-//    enum State {
-//        case Pending, Running, Finished(NSData)
-//
-//        var description : String {
-//            switch self {
-//            case .Pending: return "Pending";
-//            case .Running: return "Running";
-//            case .Finished: return "Finished";
-//            }
-//        }
-//    }
-//
-//    let URL: NSURL
-//    private(set) var state: State = .Pending
-//
-//    typealias ReturnType = NSData
-//
-//    var baseTask: BaseTask<NSData> {
-//        get {
-//            return task.baseTask
-//        }
-//    }
-//
-//    var action: (Result<NSData> -> ()) -> () {
-//        get {
-//            return baseTask.action
-//        }
-//    }
-//
-//
-//
-//    let task: Task<NSData>
-//
-//    init(URL aURL: NSURL) {
-//        URL = aURL
-//        task = Task<NSData> {
-//            self.state = .Running
-//            let data = get(self.URL).await()
-//            self.state = .Finished(data)
-//            return data
-//        }
-//    }
-//
-////    mutating func task() -> Task<NSData> {
-////        return Task {
-////            self.state = .Running
-////            let data = get(self.URL).await()
-////            self.state = .Finished(data)
-////            return data
-////        }
-////    }
-//
-//}
-
-extension NSURL {
-
-    static func URLWithDelay(delay: Int) -> NSURL {
-        return NSURL(string: "https://httpbin.org/delay/\(delay)")!
+        navigationItem.rightBarButtonItem?.enabled = !currentRequestTask.running
     }
 
 }
 
-//class DelayedRequestLoader: NSObject {
-//    enum Option {
-//        case Serial, Parallel
-//    }
-//
-//    var option = Option.Serial {
-//        didSet {
-//
-//        }
-//    }
-//
-//    var requests = [Request]()
-//    var didChange = {}
-//
-//    func reload() {
-//        Task {[weak self] in
-//            var results = [NSData]()
-//
-////            requests.
-//
-//            for (index, request) in self!.requests.enumerate() {
-//                guard self != nil else { break }
-//
-//                self?.updateRequest(index, state: .Running)
-//
-//                let data = get(request.URL).await()
-//
-//                self?.updateRequest(index, state: .Finished)
-//                results.append(data)
-//
-//                print("downloaded URL: \(request.URL)")
-//            }
-//
-//            print("downloaded \(results.count) URLs in series")
-//            }.async()
-//    }
-//
-//    func updateRequest(index: Int, state: DelayedRequest.State) {
-//        Task {[unowned self] in
-//            self.requests[index].state = state
-//            self.didChange()
-//        }.async(.Main)
-//    }
-//
-//}
-//
-//extension DelayedRequestLoader : UITableViewDataSource {
-//
-//    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return requests.count
-//    }
-//
-//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let cellIdentifier = String(format: "s%li-r%li", indexPath.section, indexPath.row)
-//        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)
-//        if cell == nil {
-//            cell = UITableViewCell(style: .Default, reuseIdentifier: cellIdentifier)
-//        }
-//
-//        let request = requests[indexPath.row]
-//        cell.textLabel?.text = "Delay: \(request.delay)   State: \(request.state.description)"
-//        switch request.state {
-//        case .Pending:
-//            cell.accessoryView = nil
-//        case .Running:
-//            let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-//            spinner.startAnimating()
-//            cell.accessoryView = spinner
-//        case .Finished:
-//            cell.accessoryView = nil
-//            cell.accessoryType = .Checkmark
-//        }
-//        
-//        return cell
-//    }
-//    
-//}
 
-/*
- struct RequestTask: TaskType {
- // original IntStack implementation
- var items = [Int]()
- mutating func push(item: Int) {
- items.append(item)
- }
- mutating func pop() -> Int {
- return items.removeLast()
- }
- // conformance to the Container protocol
- typealias ItemType = Int
- mutating func append(item: Int) {
- self.push(item)
- }
- var count: Int {
- return items.count
- }
- subscript(i: Int) -> Int {
- return items[i]
- }
- }
 
- */

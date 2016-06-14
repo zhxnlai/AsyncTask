@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import AsyncTask
 
-
 let session = NSURLSession(configuration: .ephemeralSessionConfiguration())
 
 let get = {(URL: NSURL) -> Task<NSData> in
@@ -20,10 +19,15 @@ let get = {(URL: NSURL) -> Task<NSData> in
     }
 }
 
-public extension CGFloat {
-    public static func random(lower: CGFloat = 0.0, upper: CGFloat = 1.0) -> CGFloat {
+extension CGFloat {
+    static func random(lower: CGFloat = 0.0, upper: CGFloat = 1.0) -> CGFloat {
         let r = CGFloat(arc4random()) / CGFloat(UInt32.max)
         return (r * (upper - lower)) + lower
     }
 }
 
+extension NSURL {
+    static func URLWithDelay(delay: Int) -> NSURL {
+        return NSURL(string: "https://httpbin.org/delay/\(delay)")!
+    }
+}

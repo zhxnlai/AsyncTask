@@ -9,9 +9,10 @@
 import UIKit
 import AsyncTask
 
-extension UIView {
-    class func animateWithDuration(duration: NSTimeInterval, animations: () -> Void) -> Task<Bool> {
-        return thunkify(UIView.animateWithDuration)(duration, animations)
-    }
-}
+//extension UIView {
+//    class func animateWithDuration(duration: NSTimeInterval, animations: () -> Void) -> Task<Bool> {
+//        return thunkify(UIView.animateWithDuration)(duration, animations)
+//    }
+//}
+
 

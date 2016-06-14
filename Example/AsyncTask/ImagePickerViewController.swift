@@ -8,62 +8,38 @@
 
 import UIKit
 import AsyncTask
+import ReactiveUI
+import Cartography
 
 class ImagePickerDemoViewController: UIViewController {
 
+    let imageView = UIImageView()
+    let button = UIButton()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
 
+        view.backgroundColor = UIColor.whiteColor()
+
+        view.addSubview(imageView)
+
+        button.setTitle("Pick an image", forState: .Normal)
+        button.forControlEvents(.TouchUpInside, addAction: buttonTouchUpInside)
+        view.addSubview(button)
+
+//        let button = UIButton()
+//        button.titleLabel =
+
+
+    }
+
+
+    func buttonTouchUpInside(button: UIControl) {
         Task {
-            print(self.chooseFromLibrary().await())
-            print("finished")
+            let data = ImagePickerTask(viewController: self).await()
         }.async()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }
 
-extension UIViewController {
-    
-    func chooseFromLibrary() -> Task<[String : AnyObject]?> {
-        typealias CompletionHandler = [String: AnyObject]? -> ()
-
-        class Delegate : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-            var task: CompletionHandler!
-
-            @objc func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-                task(info)
-                picker.dismissViewControllerAnimated(true, completion: nil)
-            }
-
-            @objc func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-                task(nil)
-                picker.dismissViewControllerAnimated(true, completion: nil)
-            }
-        }
-
-        let delegate = Delegate()
-
-        return Task {
-            Task {(callback: CompletionHandler) in
-                let controller = UIImagePickerController()
-                controller.sourceType = .PhotoLibrary
-                controller.delegate = delegate
-                delegate.task = callback
-
-                self.presentViewController(controller, animated: true, completion: nil)
-            }.await(.Main)
-        }
-    }
-
-    func presentViewControllerTask(viewControllerToPresent: UIViewController, animated: Bool) {
-
-    }
-
-}
 

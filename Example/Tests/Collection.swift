@@ -109,8 +109,8 @@ enum Error : ErrorType {
     case FoundZero
 }
 
-let toStringExceptZero = {(number: Int) -> ThrowingTask<String> in
-    ThrowingTask {
+let toStringExceptZero = {(number: Int) -> ThrowableTask<String> in
+    ThrowableTask {
         if number == 0 {
             throw Error.FoundZero
         }

@@ -18,9 +18,11 @@
 		09FD33361D0CEEA500E9DD34 /* LogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */; };
 		09FD33371D0CEEA500E9DD34 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */; };
 		09FD33381D0CEEA500E9DD34 /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332E1D0CEEA500E9DD34 /* Misc.swift */; };
-		09FD33391D0CEEA500E9DD34 /* ParallelDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD332F1D0CEEA500E9DD34 /* ParallelDemoViewController.swift */; };
 		09FD333A1D0CEEA500E9DD34 /* RequestDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33301D0CEEA500E9DD34 /* RequestDemoViewController.swift */; };
 		09FD333B1D0CEEA500E9DD34 /* SleepDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33311D0CEEA500E9DD34 /* SleepDemoViewController.swift */; };
+		09FD33401D0F4E8600E9DD34 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD333F1D0F4E8600E9DD34 /* Request.swift */; };
+		09FD33421D0F4EA800E9DD34 /* RequestTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33411D0F4EA800E9DD34 /* RequestTasks.swift */; };
+		09FD33441D0F91CD00E9DD34 /* ImagePickerTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FD33431D0F91CD00E9DD34 /* ImagePickerTask.swift */; };
 		0A61E056418E81DB727F694E /* Pods_AsyncTask_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFEAD6DB4CEFB96F37B16A9 /* Pods_AsyncTask_Tests.framework */; };
 		5ADBE232ED3964A237129375 /* Pods_AsyncTask_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B82D1602132238E7A5D1866A /* Pods_AsyncTask_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
@@ -53,9 +55,11 @@
 		09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewController.swift; sourceTree = "<group>"; };
 		09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		09FD332E1D0CEEA500E9DD34 /* Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
-		09FD332F1D0CEEA500E9DD34 /* ParallelDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallelDemoViewController.swift; sourceTree = "<group>"; };
 		09FD33301D0CEEA500E9DD34 /* RequestDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestDemoViewController.swift; sourceTree = "<group>"; };
 		09FD33311D0CEEA500E9DD34 /* SleepDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SleepDemoViewController.swift; sourceTree = "<group>"; };
+		09FD333F1D0F4E8600E9DD34 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		09FD33411D0F4EA800E9DD34 /* RequestTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTasks.swift; sourceTree = "<group>"; };
+		09FD33431D0F91CD00E9DD34 /* ImagePickerTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerTask.swift; sourceTree = "<group>"; };
 		38CABF9360A2E7FABA5399DD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		5BA80D60794F21DBFB352A5D /* Pods-AsyncTask_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AsyncTask_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AsyncTask_Tests/Pods-AsyncTask_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* AsyncTask_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AsyncTask_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,7 +108,6 @@
 				09FD33291D0CEEA500E9DD34 /* DefaultDemoViewController.swift */,
 				607FACD71AFB9204008FA782 /* ImagePickerViewController.swift */,
 				09FD33281D0CEEA500E9DD34 /* ChainedAnimationDemoViewController.swift */,
-				09FD332F1D0CEEA500E9DD34 /* ParallelDemoViewController.swift */,
 				09FD33301D0CEEA500E9DD34 /* RequestDemoViewController.swift */,
 			);
 			name = Demos;
@@ -116,6 +119,16 @@
 				09FD332C1D0CEEA500E9DD34 /* LogsTableViewController.swift */,
 			);
 			name = Base;
+			sourceTree = "<group>";
+		};
+		09FD333E1D0F4E3D00E9DD34 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				09FD333F1D0F4E8600E9DD34 /* Request.swift */,
+				09FD33411D0F4EA800E9DD34 /* RequestTasks.swift */,
+				09FD33431D0F91CD00E9DD34 /* ImagePickerTask.swift */,
+			);
+			name = Tasks;
 			sourceTree = "<group>";
 		};
 		5C388A21D7AD0D222AC94E27 /* Frameworks */ = {
@@ -155,6 +168,7 @@
 				09FD332D1D0CEEA500E9DD34 /* MenuTableViewController.swift */,
 				09FD333C1D0CEED400E9DD34 /* Demos */,
 				09FD333D1D0CEF0300E9DD34 /* Base */,
+				09FD333E1D0F4E3D00E9DD34 /* Tasks */,
 				09FD332B1D0CEEA500E9DD34 /* Extensions.swift */,
 				09FD332E1D0CEEA500E9DD34 /* Misc.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -421,8 +435,10 @@
 				607FACD81AFB9204008FA782 /* ImagePickerViewController.swift in Sources */,
 				09FD33351D0CEEA500E9DD34 /* Extensions.swift in Sources */,
 				09FD33381D0CEEA500E9DD34 /* Misc.swift in Sources */,
-				09FD33391D0CEEA500E9DD34 /* ParallelDemoViewController.swift in Sources */,
+				09FD33421D0F4EA800E9DD34 /* RequestTasks.swift in Sources */,
+				09FD33401D0F4E8600E9DD34 /* Request.swift in Sources */,
 				09FD333B1D0CEEA500E9DD34 /* SleepDemoViewController.swift in Sources */,
+				09FD33441D0F91CD00E9DD34 /* ImagePickerTask.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				09FD33371D0CEEA500E9DD34 /* MenuTableViewController.swift in Sources */,
 				09FD333A1D0CEEA500E9DD34 /* RequestDemoViewController.swift in Sources */,

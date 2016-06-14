@@ -9,8 +9,8 @@ class ThrowingTaskSpec: QuickSpec {
                 case NotFound
             }
 
-            let load = {(path: String) -> ThrowingTask<NSData> in
-                ThrowingTask {
+            let load = {(path: String) -> ThrowableTask<NSData> in
+                ThrowableTask {
                     NSThread.sleepForTimeInterval(0.05)
                     switch path {
                     case "profile.png":
