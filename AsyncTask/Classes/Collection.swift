@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CollectionType where Generator.Element : BaseTaskType {
+extension CollectionType where Generator.Element : ThrowableTaskType {
 
     public func awaitFirstResult(queue: DispatchQueue = DefaultQueue) -> Result<Generator.Element.ReturnType> {
         let tasks = map{$0}
@@ -24,32 +24,24 @@ extension CollectionType where Generator.Element : BaseTaskType {
         return tasks.concurrentMap(queue, concurrency: concurrency) {task in task.awaitResult()}
     }
 
-}
-
-extension CollectionType where Generator.Element : ThrowingTaskType {
-
-    private var baseTasks : [BaseTask<Generator.Element.ReturnType>] {
-        get { return map {$0.baseTask} }
-    }
-
     public func awaitFirst(queue: DispatchQueue = DefaultQueue) throws -> Generator.Element.ReturnType {
-        return try baseTasks.awaitFirstResult(queue).extract()
+        return try awaitFirstResult(queue).extract()
     }
 
     public func awaitAll(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) throws -> [Generator.Element.ReturnType] {
-        return try baseTasks.awaitAllResults(queue, concurrency: concurrency).map { result in try result.extract() }
+        return try awaitAllResults(queue, concurrency: concurrency).map {try $0.extract()}
     }
 
 }
 
-extension Dictionary where Value : ThrowingTaskType {
+extension Dictionary where Value : ThrowableTaskType {
 
     public func awaitFirst(queue: DispatchQueue = DefaultQueue) throws -> Value.ReturnType {
-        return try values.awaitFirstResult(queue).extract()
+        return try values.awaitFirst(queue)
     }
 
     public func awaitAll(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) throws -> [Key: Value.ReturnType] {
-        let elements = Array(zip(Array(keys), try values.awaitAll(queue, concurrency: concurrency)) )
+        let elements = Array(zip(Array(keys), try values.awaitAll(queue, concurrency: concurrency)))
         return Dictionary<Key, Value.ReturnType>(elements: elements)
     }
     
@@ -57,16 +49,12 @@ extension Dictionary where Value : ThrowingTaskType {
 
 extension CollectionType where Generator.Element : TaskType {
 
-    private var baseTasks : [BaseTask<Generator.Element.ReturnType>] {
-        get { return map {$0.baseTask} }
-    }
-
     public func awaitFirst(queue: DispatchQueue = DefaultQueue) -> Generator.Element.ReturnType {
-        return try! baseTasks.awaitFirstResult(queue).extract()
+        return try! awaitFirstResult(queue).extract()
     }
 
     public func awaitAll(queue: DispatchQueue = DefaultQueue, concurrency: Int = DefaultConcurrency) -> [Generator.Element.ReturnType] {
-        return baseTasks.awaitAllResults(queue, concurrency: concurrency).map {result in try! result.extract() }
+        return awaitAllResults(queue, concurrency: concurrency).map {result in try! result.extract() }
     }
 
 }

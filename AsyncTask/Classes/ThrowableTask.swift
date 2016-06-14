@@ -24,15 +24,16 @@ public enum Result<ReturnType> {
     
 }
 
-public protocol BaseTaskType {
+public protocol ThrowableTaskType {
     associatedtype ReturnType
 
     var action: (Result<ReturnType> -> ()) -> () { get }
     func asyncResult(queue: DispatchQueue, completion: Result<ReturnType> -> ())
     func awaitResult(queue: DispatchQueue) -> Result<ReturnType>
+    func await(queue: DispatchQueue) throws -> ReturnType
 }
 
-extension BaseTaskType {
+extension ThrowableTaskType {
 
     public func asyncResult(queue: DispatchQueue = DefaultQueue, completion: (Result<ReturnType> -> ()) = {_ in}) {
         dispatch_async(queue.get()) {
@@ -58,9 +59,13 @@ extension BaseTaskType {
         return value!
     }
 
+    public func await(queue: DispatchQueue = DefaultQueue) throws -> ReturnType {
+        return try awaitResult(queue).extract()
+    }
+
 }
 
-public class BaseTask<ReturnType> : BaseTaskType {
+public class ThrowableTask<ReturnType> : ThrowableTaskType {
 
     public let action: (Result<ReturnType> -> ()) -> ()
 
@@ -71,6 +76,27 @@ public class BaseTask<ReturnType> : BaseTaskType {
     public convenience init(action: () -> Result<ReturnType>) {
         self.init {callback in callback(action())}
     }
-    
-}
 
+    public convenience init(action: (ReturnType -> ()) throws -> ()) {
+        self.init {(callback: Result<ReturnType> -> ()) in
+            do {
+                try action {result in
+                    callback(Result.Success(result))
+                }
+            } catch {
+                callback(Result.Failure(error))
+            }
+        }
+    }
+
+    public convenience init(action: () throws -> ReturnType) {
+        self.init {(callback: Result<ReturnType> -> ()) in
+            do {
+                callback(Result.Success(try action()))
+            } catch {
+                callback(Result.Failure(error))
+            }
+        }
+    }
+
+}

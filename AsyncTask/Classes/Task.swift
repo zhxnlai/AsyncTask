@@ -17,23 +17,15 @@ import Foundation
 // https://www.dartlang.org/docs/tutorials/futures/
 // then
 
-public protocol TaskType : BaseTaskType {
-
-    var baseTask: BaseTask<ReturnType> { get }
+public protocol TaskType : ThrowableTaskType {
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue) -> ReturnType
 }
 
 extension TaskType {
 
-    public var baseTask: BaseTask<ReturnType> {
-        get {
-            return BaseTask<ReturnType>(action: action)
-        }
-    }
-
     public func async(queue: DispatchQueue = DefaultQueue, completion: (ReturnType -> ()) = {_ in}) {
-        baseTask.asyncResult(queue) {result in
+        asyncResult(queue) {result in
             if case let .Success(r) = result {
                 completion(r)
             }
@@ -41,7 +33,7 @@ extension TaskType {
     }
 
     public func await(queue: DispatchQueue = DefaultQueue) -> ReturnType {
-        return try! baseTask.awaitResult(queue).extract()
+        return try! awaitResult(queue).extract()
     }
 
 }
