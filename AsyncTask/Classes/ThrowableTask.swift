@@ -27,9 +27,8 @@ public enum Result<ReturnType> {
 public protocol ThrowableTaskType {
     associatedtype ReturnType
 
-    var action: (Result<ReturnType> -> ()) -> () { get }
+    func action(completion: Result<ReturnType> -> ())
     func asyncResult(queue: DispatchQueue, completion: Result<ReturnType> -> ())
-    func awaitResult(queue: DispatchQueue) -> Result<ReturnType>
     func await(queue: DispatchQueue) throws -> ReturnType
 }
 
@@ -68,6 +67,10 @@ extension ThrowableTaskType {
 public class ThrowableTask<ReturnType> : ThrowableTaskType {
 
     public let action: (Result<ReturnType> -> ()) -> ()
+
+    public func action(completion: Result<ReturnType> -> ()) {
+        action(completion)
+    }
 
     public init(action anAction: (Result<ReturnType> -> ()) -> ()) {
         action = anAction

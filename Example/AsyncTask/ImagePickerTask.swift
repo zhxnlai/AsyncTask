@@ -28,9 +28,8 @@ class ImagePickerTask : NSObject {
 extension ImagePickerTask : ThrowableTaskType {
 
     typealias ReturnType = [String : AnyObject]?
-    typealias ActionType = (Result<ReturnType> -> ()) -> ()
-    var action: ActionType {
-        return ThrowableTask<ReturnType> {
+    func action(completion: Result<ReturnType> -> ()) {
+        ThrowableTask<ReturnType> {
             try ThrowableTask {(callback: CompletionHandler) in
                 guard UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) else {
                     throw Error.PhotoLibraryNotAvailable
@@ -43,7 +42,7 @@ extension ImagePickerTask : ThrowableTaskType {
 
                 self.viewController.presentViewController(controller, animated: true, completion: nil)
             }.await(.Main)
-        }.action
+        }.asyncResult(completion: completion)
     }
 
 }

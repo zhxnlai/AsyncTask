@@ -2,7 +2,7 @@ import Quick
 import Nimble
 import AsyncTask
 
-class ThrowingTaskSpec: QuickSpec {
+class ThrowableTaskSpec: QuickSpec {
     override func spec() {
         it("should throw") {
             enum Error: ErrorType {

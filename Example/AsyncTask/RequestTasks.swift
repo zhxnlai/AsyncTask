@@ -29,9 +29,8 @@ class RequestsTask: NSObject {
 extension RequestsTask : TaskType {
 
     typealias ReturnType = [NSData]
-    typealias ActionType = (ReturnType -> ()) -> ()
-    var action: ActionType {
-        return Task<ReturnType> {[unowned self] in
+    func action(completion: ReturnType -> ()) {
+        Task<ReturnType> {[unowned self] in
             self.running = true
             var results : [NSData]!
             switch self.option {
@@ -42,7 +41,7 @@ extension RequestsTask : TaskType {
             }
             self.running = false
             return results
-        }.action
+        }.async(completion: completion)
     }
 
 }

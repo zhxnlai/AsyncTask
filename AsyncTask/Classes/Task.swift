@@ -11,7 +11,7 @@ import Foundation
 public protocol TaskType {
     associatedtype ReturnType
 
-    var action: (ReturnType -> ()) -> () { get }
+    func action(completion: ReturnType -> ())
     func async(queue: DispatchQueue, completion: ReturnType -> ())
     func await(queue: DispatchQueue) -> ReturnType
 }
@@ -43,6 +43,10 @@ extension TaskType {
 public class Task<ReturnType> : TaskType {
 
     public let action: (ReturnType -> ()) -> ()
+
+    public func action(completion: ReturnType -> ()) {
+        action(completion)
+    }
 
     public init(action anAction: (ReturnType -> ()) -> ()) {
         action = anAction

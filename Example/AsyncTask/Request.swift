@@ -36,16 +36,15 @@ class Request {
 extension Request : TaskType {
 
     typealias ReturnType = NSData
-    typealias ActionType = (NSData -> ()) -> ()
-    var action: ActionType {
-        return Task<ReturnType> {
+    func action(completion: ReturnType -> ()) {
+        Task<ReturnType> {[unowned self] in
             self.state = .Running
             self.didChange()
             let data = get(self.URL).await()
             self.state = .Finished(data)
             self.didChange()
             return data
-        }.action
+        }.async(completion: completion)
     }
 
 }
