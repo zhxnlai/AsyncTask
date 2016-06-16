@@ -13,6 +13,35 @@ AsyncTask is much more than Future and Promise.
 - It supports native **error handling** with `do-catch` and `try`.
 - It is **protocol oriented**; so you can turn any object into a Task.
 
+Without AsyncTask:
+```swift
+// get a global concurrent queue
+let queue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
+// submit a task to the queue for background execution
+dispatch_async(queue) {
+    let enhancedImage = self.applyImageFilter(image) // expensive operation taking a few seconds
+    // update UI on the main queue
+    dispatch_async(dispatch_get_main_queue()) {
+        self.imageView.image = enhancedImage
+        UIView.animateWithDuration(0.3, animations: {
+            self.imageView.alpha = 1
+        }) { completed in
+            // add code to happen next here
+        }
+    }
+}
+```
+
+With AsyncTask:
+```swift
+Task {
+    let enhancedImage = self.applyImageFilter(image)
+    Task {self.imageView.image = enhancedImage}.async(.Main)
+    let completed = UIView.animateWithDurationAsync(0.3) { self.label.alpha = 1 }.await(.Main)
+    // add code to happen next here
+}.async()
+```
+
 ## Installation
 
 AsyncTask is available through [CocoaPods](http://cocoapods.org). To install
