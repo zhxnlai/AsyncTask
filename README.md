@@ -42,6 +42,11 @@ Task {
 }.async()
 ```
 
+It even allows you to extend existing types: 
+```swift
+let (data, response) = try! NSURL(string: "www.google.com")!.await()
+```
+
 ## Installation
 
 AsyncTask is available through [CocoaPods](http://cocoapods.org). To install
