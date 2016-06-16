@@ -2,6 +2,7 @@
 
 <!-- [![CI Status](http://img.shields.io/travis/Zhixuan Lai/AsyncTask.svg?style=flat)](https://travis-ci.org/Zhixuan Lai/AsyncTask) -->
 [![Version](https://img.shields.io/cocoapods/v/AsyncTask.svg?style=flat)](http://cocoapods.org/pods/AsyncTask)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/zhxnlai/AsyncTask)
 [![License](https://img.shields.io/cocoapods/l/AsyncTask.svg?style=flat)](http://cocoapods.org/pods/AsyncTask)
 [![Platform](https://img.shields.io/cocoapods/p/AsyncTask.svg?style=flat)](http://cocoapods.org/pods/AsyncTask)
 
