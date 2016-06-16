@@ -35,7 +35,6 @@ extension ImagePickerTask : ThrowableTaskType {
                     throw Error.PhotoLibraryNotAvailable
                 }
                 let controller = UIImagePickerController()
-
                 controller.sourceType = .PhotoLibrary
                 controller.delegate = self
                 self.completionHandler = callback

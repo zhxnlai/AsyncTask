@@ -29,6 +29,7 @@ public protocol ThrowableTaskType {
 
     func action(completion: Result<ReturnType> -> ())
     func asyncResult(queue: DispatchQueue, completion: Result<ReturnType> -> ())
+    func awaitResult(queue: DispatchQueue) -> Result<ReturnType>
     func await(queue: DispatchQueue) throws -> ReturnType
 }
 
