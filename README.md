@@ -21,6 +21,10 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "AsyncTask"
 ```
+
+## Tutorial
+* [Async Programming in Swift with AsyncTask](https://medium.com/@zhxnlai/async-programming-in-swift-with-asynctask-95a708c1c3c0)
+
 ## Usage
 In AsyncTask, a `Task` represents the eventual result of an asynchronous operation, as do Future and Promise in other libraries. It can wrap both synchronous and asynchronous APIs. To create a `Task`, initialize it with a closure. To make it reusable, write functions that return a task.
 
