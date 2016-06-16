@@ -184,7 +184,7 @@ class ImagePickerDemoViewController: UIViewController {
 
 }
 ```
-The `ImagePickerTask` knows when the user has picked an image or canceled because it is the `UIImagePickerViewController`’s delegate. For more details, see the example folder.
+The `ImagePickerTask` knows when the user has picked an image or canceled because it is the `UIImagePickerViewController`’s delegate. For more details, see its [implementation](https://gist.github.com/zhxnlai/7594df6ec62daf3d38ada9593c9b7408) and the example folder.
 
 ## Example
 
