@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AsyncTask: e7bd93a2dfbfbb0bcff1713ed26aff567c4b6b50
+  AsyncTask: 04dbe2ad6007698d7e608eb4c93731dc21bad314
   Cartography: 70af183a248547694a8cfaa6b989cb7e04589985
   Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
   Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226

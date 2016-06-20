@@ -29,6 +29,9 @@ An asynchronous programming library for Swift that is composable and protocol or
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = "10.10"
+  s.tvos.deployment_target = "9.0"
+  s.requires_arc = true
 
   s.source_files = 'AsyncTask/Classes/**/*'
 

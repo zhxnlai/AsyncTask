@@ -12,6 +12,7 @@
 		03D2A4113A1E332CFC931CA44D37CF8D /* QCKDSL.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BA0351849FB1CA83A3762462713460A /* QCKDSL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05379FDF88302F8A6A9B80EC26C3AAA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71B6C19E4D0C8A4D14A6EF1AB8728EB /* Foundation.framework */; };
 		0729DED1737DCDB309394E0B59393F37 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3200558328002B3D688E86DCFD82C69 /* Dimension.swift */; };
+		097BB16B1D18B3E800B0ABA7 /* AsyncTask-OSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 097BB16A1D18B3E800B0ABA7 /* AsyncTask-OSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0B56885D6E18E73DEF1E14D0D55DA67A /* QuickConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A3002583D0782E846C70841C97074A62 /* QuickConfiguration.m */; };
 		0FA2B8EC8E11B167CCAEC3FACC069845 /* Pods-AsyncTask_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EC073C6F45E115F6E7DC06D9BC95168C /* Pods-AsyncTask_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		112614F21939902B59102E6E876ADCBC /* RaisesException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DC2B9058C8C8A21F25FF1625FCD42 /* RaisesException.swift */; };
@@ -194,6 +195,9 @@
 		063A8C38D0822A0449C4A76244D9E864 /* DSL.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DSL.h; path = Sources/Nimble/objc/DSL.h; sourceTree = "<group>"; };
 		0713741D25B211469BF9CD82E2868BCF /* Property.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Property.swift; path = Cartography/Property.swift; sourceTree = "<group>"; };
 		089DD10FEFD8B0E0D5EBD5EC9A1AC307 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		097BB1681D18B3E800B0ABA7 /* AsyncTask-OSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "AsyncTask-OSX.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		097BB16A1D18B3E800B0ABA7 /* AsyncTask-OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AsyncTask-OSX.h"; sourceTree = "<group>"; };
+		097BB16C1D18B3E800B0ABA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		09C468BE66C79C8704CF8688C26D66B2 /* Pods_AsyncTask_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AsyncTask_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA3B29ED3E79508BB4F9916CC6A77EA /* Point.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Point.swift; path = Cartography/Point.swift; sourceTree = "<group>"; };
 		0BB984FDECC77D2FF2C3278551053648 /* BeLessThan.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeLessThan.swift; path = Sources/Nimble/Matchers/BeLessThan.swift; sourceTree = "<group>"; };
@@ -364,6 +368,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		097BB1641D18B3E800B0ABA7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3FFBF708FDB165136C9EA1882B05BE03 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -435,6 +446,7 @@
 				09C468BE66C79C8704CF8688C26D66B2 /* Pods_AsyncTask_Tests.framework */,
 				F789161F3CDE8DB0B56FE420BB8A70D9 /* Quick.framework */,
 				19B5F4BE68678B05401B1C2EB2CA53A0 /* ReactiveUI.framework */,
+				097BB1681D18B3E800B0ABA7 /* AsyncTask-OSX.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -447,6 +459,15 @@
 				44E91E6A6263B0D61B049B648F6271E7 /* XCTest.framework */,
 			);
 			name = iOS;
+			sourceTree = "<group>";
+		};
+		097BB1691D18B3E800B0ABA7 /* AsyncTask-OSX */ = {
+			isa = PBXGroup;
+			children = (
+				097BB16A1D18B3E800B0ABA7 /* AsyncTask-OSX.h */,
+				097BB16C1D18B3E800B0ABA7 /* Info.plist */,
+			);
+			path = "AsyncTask-OSX";
 			sourceTree = "<group>";
 		};
 		0A9AC5E101A9B50B3FF68768C4278BCC /* Support Files */ = {
@@ -545,6 +566,7 @@
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				C2D7D5F4D292C5C68BD7A021BAA7E77A /* Development Pods */,
+				097BB1691D18B3E800B0ABA7 /* AsyncTask-OSX */,
 				122DA2E5084A4393C29BE363C764795C /* Frameworks */,
 				B653B4D9C753C6AAE0E20C1644FFB7BC /* Pods */,
 				0601758290571EAB66F743632C2B35D4 /* Products */,
@@ -774,6 +796,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		097BB1651D18B3E800B0ABA7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				097BB16B1D18B3E800B0ABA7 /* AsyncTask-OSX.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		514705BF944036B79FA99816C564643C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -858,6 +888,24 @@
 			name = Quick;
 			productName = Quick;
 			productReference = F789161F3CDE8DB0B56FE420BB8A70D9 /* Quick.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		097BB1671D18B3E800B0ABA7 /* AsyncTask-OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 097BB17D1D18B3E800B0ABA7 /* Build configuration list for PBXNativeTarget "AsyncTask-OSX" */;
+			buildPhases = (
+				097BB1631D18B3E800B0ABA7 /* Sources */,
+				097BB1641D18B3E800B0ABA7 /* Frameworks */,
+				097BB1651D18B3E800B0ABA7 /* Headers */,
+				097BB1661D18B3E800B0ABA7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AsyncTask-OSX";
+			productName = "AsyncTask-OSX";
+			productReference = 097BB1681D18B3E800B0ABA7 /* AsyncTask-OSX.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		256E85D99C554D3369943A12E8B3A55C /* Pods-AsyncTask_Tests */ = {
@@ -976,6 +1024,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					097BB1671D18B3E800B0ABA7 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -996,11 +1049,29 @@
 				256E85D99C554D3369943A12E8B3A55C /* Pods-AsyncTask_Tests */,
 				04933522884C1E8B0CA770D7FA82B4EC /* Quick */,
 				AB3ED516AE1AAC32E0340B8C1685A3DC /* ReactiveUI */,
+				097BB1671D18B3E800B0ABA7 /* AsyncTask-OSX */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		097BB1661D18B3E800B0ABA7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		097BB1631D18B3E800B0ABA7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2823BDA58F2F74DEAB39C2F345AA07A1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1230,6 +1301,76 @@
 			};
 			name = Debug;
 		};
+		097BB1791D18B3E800B0ABA7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "AsyncTask-OSX/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.axcel.AsyncTask-OSX";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		097BB17A1D18B3E800B0ABA7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "AsyncTask-OSX/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.axcel.AsyncTask-OSX";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		0ACDCBCB0B6796575F46FFA2F5410C6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1262,6 +1403,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SYMROOT = "${SRCROOT}/../build";
 				VALIDATE_PRODUCT = YES;
@@ -1611,6 +1753,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SYMROOT = "${SRCROOT}/../build";
@@ -1712,6 +1855,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		097BB17D1D18B3E800B0ABA7 /* Build configuration list for PBXNativeTarget "AsyncTask-OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				097BB1791D18B3E800B0ABA7 /* Debug */,
+				097BB17A1D18B3E800B0ABA7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
