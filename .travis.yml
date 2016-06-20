@@ -1,14 +1,33 @@
-# references:
-# * http://www.objc.io/issue-6/travis-ci.html
-# * https://github.com/supermarin/xcpretty#usage
-
 osx_image: xcode7.3
 language: objective-c
-# cache: cocoapods
-# podfile: Example/Podfile
-# before_install:
-# - gem install cocoapods # Since Travis is not always on latest version
-# - pod install --project-directory=Example
+cache: cocoapods
+podfile: Example/Podfile
+before_install:
+- gem install cocoapods
+- pod install --project-directory=Example
+- brew update
+- brew outdated carthage || brew upgrade carthage
 script:
-- set -o pipefail && xcodebuild test -workspace Example/AsyncTask.xcworkspace -scheme AsyncTask-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
+- set -o pipefail && xcodebuild test -workspace Example/AsyncTask.xcworkspace -scheme
+  AsyncTask-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
 - pod lib lint
+xcode_workspace: Example/AsyncTask.xcworkspace
+xcode_scheme: AsyncTask-Example
+xcode_sdk: iphonesimulator9.3
+env:
+  global:
+  - FRAMEWORK_NAME=AsyncTask
+before_script:
+- carthage bootstrap
+before_deploy:
+- carthage build --no-skip-current
+- carthage archive $FRAMEWORK_NAME
+deploy:
+  provider: releases
+  api_key:
+    secure: EKGGCMYgZIrBzeaBIer8N1kVFCgJ7FVvM1raRuOak7Io93hLiIh8rdaXIgynWT/RujM0ErS55foHOn4Xo/7neu215i2r6Zc84DqPYwi+xxmpNTnJvXSm6R4z5Uj6dsTxsmzXQyJMQa63+hD5d4NONbzUzCAAmZwUz8KLPcpMiY6HKjPS3bferDanMMZWeDFn7GBTwLeRJN/G0RPJOMg8RE7WOuqeA4y6a7F7ObrBgxHEqvnqDiy+VQy1chhdsmRRYxUJNxLhV3WcJGxSs7lTxVGwdfTMm3oZb8tyj3fZ2nvT+k5xaCQ/QlcGbK5KS8NkYxenqccyHA8HtI8dXnso2vhuHHO1OPh9kNoA7mQ1Qvh5b1RaNKU0GF2oJU6edvKwmr0JBtRntFF06N8A5Ee8uQkNDnnh4KkRlV4LcZ2UDHQ2JhfvuamivrHCsyiI/xgS5VpceEUeWb2I99rfW6j+vqSNxKWNeT4gRxBgEtM4PAf3q0BXiGroLq8qfuatQmWqTFImz8qS8v0UgwMbFRdnwXb2t3Wr1NYCu2FpCajK4ijq0WKoZkfVC4xkRRY3joa4tSargjxsmAw/FLrt+jt3N/7BwfUDJVFFw5lQx+RQBVw50jWhB7go+u2rR7TbnqZeMT1Pm4M9CPne9YgZR4ETCDrric/dpdRCJMTx3aL0bws=
+  file: AsyncTask.framework.zip
+  skip_cleanup: true
+  on:
+    repo: zhxnlai/AsyncTask
+    tags: true
