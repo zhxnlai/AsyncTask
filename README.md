@@ -50,11 +50,26 @@ let (data, response) = try! NSURL(string: "www.google.com")!.await()
 
 ## Installation
 
+### [CocoaPods](http://cocoapods.org)
 AsyncTask is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
 pod "AsyncTask"
+```
+
+### [Carthage](https://github.com/Carthage/Carthage)
+
+**Xcode 7.1 required**
+
+Add this to `Cartfile`
+
+```
+github "zhxnlai/AsyncTask" ~> 0.1
+```
+
+```
+$ carthage update
 ```
 
 ## Tutorial
