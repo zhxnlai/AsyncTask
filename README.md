@@ -211,7 +211,7 @@ The `ImagePickerTask` knows when the user has picked an image or canceled becaus
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-You may also want to take a look at the [test cases](https://github.com/zhxnlai/AsyncTask/tree/master/Example/Tests).
+You may also want to take a look at the [test cases](https://github.com/zhxnlai/AsyncTask/tree/master/Tests).
 
 ## Author
 
