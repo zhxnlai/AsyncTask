@@ -163,7 +163,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0942503E1D18D1BB00A8EC2C /* AsyncTaskOSXTests */ = {
+		0942503E1D18D1BB00A8EC2C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				0942505B1D18D4E300A8EC2C /* Collection.swift */,
@@ -174,18 +174,27 @@
 				094250601D18D4E300A8EC2C /* TrivialExample.swift */,
 				094250411D18D1BB00A8EC2C /* Info.plist */,
 			);
+			name = Tests;
 			path = AsyncTaskOSXTests;
+			sourceTree = "<group>";
+		};
+		0942506F1D18E67A00A8EC2C /* AsyncTask */ = {
+			isa = PBXGroup;
+			children = (
+				097BB1E41D18B86C00B0ABA7 /* iOS */,
+				097BB1CE1D18B7F400B0ABA7 /* OSX */,
+				097BB1DB1D18B81A00B0ABA7 /* TVOS */,
+				097BB1EF1D18B88900B0ABA7 /* WatchOS */,
+			);
+			name = AsyncTask;
 			sourceTree = "<group>";
 		};
 		097BB1A41D18B70400B0ABA7 = {
 			isa = PBXGroup;
 			children = (
 				097BB1F61D18B8BA00B0ABA7 /* Source */,
-				097BB1E41D18B86C00B0ABA7 /* AsyncTaskiOS */,
-				097BB1CE1D18B7F400B0ABA7 /* AsyncTaskOSX */,
-				097BB1DB1D18B81A00B0ABA7 /* AsyncTaskTVOS */,
-				097BB1EF1D18B88900B0ABA7 /* AsyncTaskWatchOS */,
-				0942503E1D18D1BB00A8EC2C /* AsyncTaskOSXTests */,
+				0942506F1D18E67A00A8EC2C /* AsyncTask */,
+				0942503E1D18D1BB00A8EC2C /* Tests */,
 				097BB1AF1D18B70400B0ABA7 /* Products */,
 				097BB2251D18C24200B0ABA7 /* Frameworks */,
 			);
@@ -203,39 +212,43 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		097BB1CE1D18B7F400B0ABA7 /* AsyncTaskOSX */ = {
+		097BB1CE1D18B7F400B0ABA7 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
 				097BB1CF1D18B7F400B0ABA7 /* AsyncTask.h */,
 				097BB1D11D18B7F400B0ABA7 /* Info.plist */,
 			);
+			name = OSX;
 			path = AsyncTaskOSX;
 			sourceTree = "<group>";
 		};
-		097BB1DB1D18B81A00B0ABA7 /* AsyncTaskTVOS */ = {
+		097BB1DB1D18B81A00B0ABA7 /* TVOS */ = {
 			isa = PBXGroup;
 			children = (
 				097BB1DC1D18B81A00B0ABA7 /* AsyncTaskTVOS.h */,
 				097BB1DE1D18B81A00B0ABA7 /* Info.plist */,
 			);
+			name = TVOS;
 			path = AsyncTaskTVOS;
 			sourceTree = "<group>";
 		};
-		097BB1E41D18B86C00B0ABA7 /* AsyncTaskiOS */ = {
+		097BB1E41D18B86C00B0ABA7 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
 				097BB1E51D18B86C00B0ABA7 /* AsyncTask.h */,
 				097BB1E61D18B86C00B0ABA7 /* Info.plist */,
 			);
+			name = iOS;
 			path = AsyncTaskiOS;
 			sourceTree = "<group>";
 		};
-		097BB1EF1D18B88900B0ABA7 /* AsyncTaskWatchOS */ = {
+		097BB1EF1D18B88900B0ABA7 /* WatchOS */ = {
 			isa = PBXGroup;
 			children = (
 				097BB1F01D18B88900B0ABA7 /* AsyncTaskWatchOS.h */,
 				097BB1F21D18B88900B0ABA7 /* Info.plist */,
 			);
+			name = WatchOS;
 			path = AsyncTaskWatchOS;
 			sourceTree = "<group>";
 		};
