@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AsyncTask'
-  s.version          = '0.1.0'
+  s.version          = '0.1.3'
   s.summary          = 'An asynchronous programming library for Swift.'
 
 # This description is used to generate tags and improve search results.
@@ -29,8 +29,11 @@ An asynchronous programming library for Swift that is composable and protocol or
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = "10.10"
+  s.tvos.deployment_target = "9.0"
+  s.requires_arc = true
 
-  s.source_files = 'AsyncTask/Classes/**/*'
+  s.source_files = 'Source/**/*'
 
   # s.resource_bundles = {
   #   'AsyncTask' => ['AsyncTask/Assets/*.png']
