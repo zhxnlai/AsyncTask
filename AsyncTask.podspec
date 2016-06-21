@@ -33,7 +33,7 @@ An asynchronous programming library for Swift that is composable and protocol or
   s.tvos.deployment_target = "9.0"
   s.requires_arc = true
 
-  s.source_files = 'Source/**/*'
+  s.source_files = 'Source/Base/*.swift'
 
   # s.resource_bundles = {
   #   'AsyncTask' => ['AsyncTask/Assets/*.png']
