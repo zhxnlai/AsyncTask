@@ -13,7 +13,8 @@ env:
   - FRAMEWORK_NAME=AsyncTask
 before_script:
 - carthage bootstrap --platform osx
-# script:
+script:
+  - xctool -project AsyncTask.xcodeproj -scheme AsyncTaskOSXTests build test
 # - set -o pipefail && xcodebuild test -project AsyncTask.xcodeproj -scheme
 #   AsyncTaskOSXTests -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
 # - pod lib lint
