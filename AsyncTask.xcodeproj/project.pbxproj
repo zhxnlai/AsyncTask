@@ -13,7 +13,6 @@
 		094250521D18D23D00A8EC2C /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 094250491D18D1DD00A8EC2C /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		094250531D18D23D00A8EC2C /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0942504A1D18D1DD00A8EC2C /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		094250541D18D24300A8EC2C /* AsyncTask.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 097BB1CD1D18B7F400B0ABA7 /* AsyncTask.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		094250611D18D4E300A8EC2C /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0942505B1D18D4E300A8EC2C /* Collection.swift */; };
 		094250621D18D4E300A8EC2C /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0942505C1D18D4E300A8EC2C /* DispatchQueue.swift */; };
 		094250631D18D4E300A8EC2C /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0942505D1D18D4E300A8EC2C /* Helper.swift */; };
 		094250641D18D4E300A8EC2C /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0942505E1D18D4E300A8EC2C /* Task.swift */; };
@@ -89,10 +88,9 @@
 /* Begin PBXFileReference section */
 		094250361D18CFD300A8EC2C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0942503D1D18D1BB00A8EC2C /* AsyncTaskOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AsyncTaskOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		094250411D18D1BB00A8EC2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		094250411D18D1BB00A8EC2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Tests/Info.plist; sourceTree = "<group>"; };
 		094250491D18D1DD00A8EC2C /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
 		0942504A1D18D1DD00A8EC2C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = "<group>"; };
-		0942505B1D18D4E300A8EC2C /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Collection.swift; path = Tests/Collection.swift; sourceTree = SOURCE_ROOT; };
 		0942505C1D18D4E300A8EC2C /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DispatchQueue.swift; path = Tests/DispatchQueue.swift; sourceTree = SOURCE_ROOT; };
 		0942505D1D18D4E300A8EC2C /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helper.swift; path = Tests/Helper.swift; sourceTree = SOURCE_ROOT; };
 		0942505E1D18D4E300A8EC2C /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Task.swift; path = Tests/Task.swift; sourceTree = SOURCE_ROOT; };
@@ -166,7 +164,6 @@
 		0942503E1D18D1BB00A8EC2C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				0942505B1D18D4E300A8EC2C /* Collection.swift */,
 				0942505C1D18D4E300A8EC2C /* DispatchQueue.swift */,
 				0942505D1D18D4E300A8EC2C /* Helper.swift */,
 				0942505E1D18D4E300A8EC2C /* Task.swift */,
@@ -178,22 +175,22 @@
 			path = AsyncTaskOSXTests;
 			sourceTree = "<group>";
 		};
-		0942506F1D18E67A00A8EC2C /* AsyncTask */ = {
+		0942506F1D18E67A00A8EC2C /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				097BB1F61D18B8BA00B0ABA7 /* Base */,
 				097BB1E41D18B86C00B0ABA7 /* iOS */,
 				097BB1CE1D18B7F400B0ABA7 /* OSX */,
 				097BB1DB1D18B81A00B0ABA7 /* TVOS */,
 				097BB1EF1D18B88900B0ABA7 /* WatchOS */,
 			);
-			name = AsyncTask;
+			name = Source;
 			sourceTree = "<group>";
 		};
 		097BB1A41D18B70400B0ABA7 = {
 			isa = PBXGroup;
 			children = (
-				097BB1F61D18B8BA00B0ABA7 /* Source */,
-				0942506F1D18E67A00A8EC2C /* AsyncTask */,
+				0942506F1D18E67A00A8EC2C /* Source */,
 				0942503E1D18D1BB00A8EC2C /* Tests */,
 				097BB1AF1D18B70400B0ABA7 /* Products */,
 				097BB2251D18C24200B0ABA7 /* Frameworks */,
@@ -219,7 +216,7 @@
 				097BB1D11D18B7F400B0ABA7 /* Info.plist */,
 			);
 			name = OSX;
-			path = AsyncTaskOSX;
+			path = Source/OSX;
 			sourceTree = "<group>";
 		};
 		097BB1DB1D18B81A00B0ABA7 /* TVOS */ = {
@@ -229,7 +226,7 @@
 				097BB1DE1D18B81A00B0ABA7 /* Info.plist */,
 			);
 			name = TVOS;
-			path = AsyncTaskTVOS;
+			path = Source/TVOS;
 			sourceTree = "<group>";
 		};
 		097BB1E41D18B86C00B0ABA7 /* iOS */ = {
@@ -239,7 +236,7 @@
 				097BB1E61D18B86C00B0ABA7 /* Info.plist */,
 			);
 			name = iOS;
-			path = AsyncTaskiOS;
+			path = Source/iOS;
 			sourceTree = "<group>";
 		};
 		097BB1EF1D18B88900B0ABA7 /* WatchOS */ = {
@@ -249,10 +246,10 @@
 				097BB1F21D18B88900B0ABA7 /* Info.plist */,
 			);
 			name = WatchOS;
-			path = AsyncTaskWatchOS;
+			path = Source/WatchOS;
 			sourceTree = "<group>";
 		};
-		097BB1F61D18B8BA00B0ABA7 /* Source */ = {
+		097BB1F61D18B8BA00B0ABA7 /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				097BB1F71D18B8BA00B0ABA7 /* Collection.swift */,
@@ -263,7 +260,8 @@
 				097BB1FC1D18B8BA00B0ABA7 /* ThrowableTask.swift */,
 				097BB1FD1D18B8BA00B0ABA7 /* Thunkify.swift */,
 			);
-			path = Source;
+			name = Base;
+			path = Source/Base;
 			sourceTree = "<group>";
 		};
 		097BB2251D18C24200B0ABA7 /* Frameworks */ = {
@@ -501,7 +499,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				094250641D18D4E300A8EC2C /* Task.swift in Sources */,
-				094250611D18D4E300A8EC2C /* Collection.swift in Sources */,
 				094250651D18D4E300A8EC2C /* ThrowableTask.swift in Sources */,
 				094250621D18D4E300A8EC2C /* DispatchQueue.swift in Sources */,
 				094250661D18D4E300A8EC2C /* TrivialExample.swift in Sources */,
@@ -594,7 +591,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
-				INFOPLIST_FILE = AsyncTaskOSXTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.axcel.AsyncTaskOSXTests;
@@ -614,7 +611,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
-				INFOPLIST_FILE = AsyncTaskOSXTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.axcel.AsyncTaskOSXTests;
@@ -728,7 +725,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/AsyncTaskiOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -749,7 +746,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = NO;
-				INFOPLIST_FILE = "$(SRCROOT)/AsyncTaskiOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -771,7 +768,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = AsyncTaskOSX/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/OSX/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -793,7 +790,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = NO;
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = AsyncTaskOSX/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/OSX/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -812,7 +809,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = AsyncTaskTVOS/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/TVOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.axcel.AsyncTaskTVOS;
@@ -832,7 +829,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = AsyncTaskTVOS/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/TVOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.axcel.AsyncTaskTVOS;
@@ -852,7 +849,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = AsyncTaskWatchOS/Info.plist;
+				INFOPLIST_FILE = Source/WatchOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.axcel.AsyncTaskWatchOS;
@@ -872,7 +869,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = AsyncTaskWatchOS/Info.plist;
+				INFOPLIST_FILE = Source/WatchOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.axcel.AsyncTaskWatchOS;
