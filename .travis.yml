@@ -7,10 +7,6 @@ before_install:
 - pod install --project-directory=Example
 - brew update
 - brew outdated carthage || brew upgrade carthage
-script:
-- set -o pipefail && xcodebuild test -workspace Example/AsyncTask.xcworkspace -scheme
-  AsyncTask-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
-- pod lib lint
 xcode_workspace: Example/AsyncTask.xcworkspace
 xcode_scheme: AsyncTask-Example
 xcode_sdk: iphonesimulator9.3
@@ -18,7 +14,11 @@ env:
   global:
   - FRAMEWORK_NAME=AsyncTask
 before_script:
-- carthage bootstrap
+- carthage bootstrap --platform osx
+script:
+- set -o pipefail && xcodebuild test -workspace Example/AsyncTask.xcworkspace -scheme
+  AsyncTask-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
+- pod lib lint
 before_deploy:
 - carthage build --no-skip-current
 - carthage archive $FRAMEWORK_NAME

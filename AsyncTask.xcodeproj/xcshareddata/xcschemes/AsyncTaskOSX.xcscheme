@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "097BB1AD1D18B70400B0ABA7"
+               BlueprintIdentifier = "097BB1CC1D18B7F400B0ABA7"
                BuildableName = "AsyncTask.framework"
-               BlueprintName = "AsyncTaskiOS"
+               BlueprintName = "AsyncTaskOSX"
                ReferencedContainer = "container:AsyncTask.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "097BB1AD1D18B70400B0ABA7"
+            BlueprintIdentifier = "097BB1CC1D18B7F400B0ABA7"
             BuildableName = "AsyncTask.framework"
-            BlueprintName = "AsyncTaskiOS"
+            BlueprintName = "AsyncTaskOSX"
             ReferencedContainer = "container:AsyncTask.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "097BB1AD1D18B70400B0ABA7"
+            BlueprintIdentifier = "097BB1CC1D18B7F400B0ABA7"
             BuildableName = "AsyncTask.framework"
-            BlueprintName = "AsyncTaskiOS"
+            BlueprintName = "AsyncTaskOSX"
             ReferencedContainer = "container:AsyncTask.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

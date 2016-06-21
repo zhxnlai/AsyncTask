@@ -9,10 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 //! Project version number for AsyncTaskOSX.
-FOUNDATION_EXPORT double AsyncTaskOSXVersionNumber;
+FOUNDATION_EXPORT double AsyncTaskVersionNumber;
 
 //! Project version string for AsyncTaskOSX.
-FOUNDATION_EXPORT const unsigned char AsyncTaskOSXVersionString[];
+FOUNDATION_EXPORT const unsigned char AsyncTaskVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AsyncTaskOSX/PublicHeader.h>
 
